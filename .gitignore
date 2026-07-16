@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# React / Node
+node_modules/
+dist/
+build/
+
+# Docker
+.docker-ignore
+
+# System files
+.DS_Store
+.vscode/
