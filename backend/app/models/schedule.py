@@ -5,8 +5,10 @@ class Schedule(Base):
     __tablename__ = "schedules"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    member_id = Column(Integer, ForeignKey("family_members.id"))
+
+    family_member_id = Column(Integer, ForeignKey("family_members.id"))
     medication_id = Column(Integer, ForeignKey("medications.id"))
+
     frequency_days = Column(Integer)
     reminder_times = Column(JSON)
     start_date = Column(Date)

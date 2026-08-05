@@ -8,13 +8,44 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+ 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isAccepted) {
       alert("Vui lòng đồng ý với chính sách và giới hạn trách nhiệm y tế trước khi tiếp tục!");
       return;
     }
-    console.log("Submitted:", { email, password });
+
+    const endpoint = isLoginMode ? "http://127.0.0.1:8000/api/auth/login" : "http://127.0.0.1:8000/api/auth/register";
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, full_name: email.split('@')[0],role: "ADMIN" })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Có lỗi xảy ra!");
+      }
+
+      alert(data.message);
+      
+      if (isLoginMode) {
+        // Lưu thông tin user
+        localStorage.setItem("user", JSON.stringify(data.user));
+        
+        // Tải lại trang hoặc gọi hàm đổi màn hình để nhảy thẳng vào Dashboard
+        window.location.reload(); 
+      } else {
+        setIsLoginMode(true);
+      }
+
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (

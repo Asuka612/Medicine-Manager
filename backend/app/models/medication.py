@@ -5,9 +5,11 @@ class Medication(Base):
     __tablename__ = "medications"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+
+    family_member_id = Column(Integer, ForeignKey("family_members.id"))
+
     name = Column(String(100))
     dosage = Column(String(50))
     stock_quantity = Column(Integer)
-    min_threshold = Column(Integer, default=5) # Ngưỡng cảnh báo tồn kho
+    min_threshold = Column(Integer, default=5)
     expiry_date = Column(Date)
