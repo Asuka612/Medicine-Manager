@@ -1,11 +1,12 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Integer, Date, ForeignKey, JSON
 from app.database import Base
 
-class FamilyMember(Base):
-    __tablename__ = "family_members"
+class Schedule(Base):
+    __tablename__ = "schedules"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    full_name = Column(String(100))
-    relationship = Column(String(50))
-    medical_history_encrypted = Column(Text)
+    member_id = Column(Integer, ForeignKey("family_members.id"))
+    medication_id = Column(Integer, ForeignKey("medications.id"))
+    frequency_days = Column(Integer)
+    reminder_times = Column(JSON)
+    start_date = Column(Date)
