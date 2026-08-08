@@ -91,7 +91,8 @@ class ScheduleService:
             notification_message=data.notification_message,
             reminder_before_minutes=data.reminder_before_minutes
         )
-
+        db.commit()
+        db.refresh(schedule)
         return schedule
 
     @staticmethod

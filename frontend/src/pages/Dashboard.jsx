@@ -27,9 +27,11 @@ function Dashboard() {
   // =========================================================
 
   const [memberForm, setMemberForm] = useState({
+    email: "",
+    password: "",
     full_name: "",
     relationship: "",
-    medical_history: "",
+    medical_history_encrypted: "",
   });
 
   // =========================================================
@@ -236,9 +238,11 @@ function Dashboard() {
       alert("Thêm thành viên thành công.");
 
       setMemberForm({
+        email: "",
+        password: "",
         full_name: "",
         relationship: "",
-        medical_history: "",
+        medical_history_encrypted: "",
       });
 
       setShowMemberForm(false);
@@ -751,6 +755,24 @@ function Dashboard() {
 
       <form onSubmit={handleAddMember}>
         <div className="form-group">
+          <label>Email</label>
+
+          <input
+            type="email"
+            name="email"
+            value={memberForm.email}
+            onChange={handleMemberInput}
+            placeholder="member@gmail.com"
+          />
+          <label>Mật khẩu</label>
+
+          <input
+            type="password"
+            name="password"
+            value={memberForm.password}
+            onChange={handleMemberInput}
+            placeholder="Nhập mật khẩu"
+          />
           <label>Họ tên</label>
 
           <input
@@ -780,10 +802,8 @@ function Dashboard() {
           <label>Bệnh sử</label>
 
           <textarea
-            name="medical_history"
-            value={
-              memberForm.medical_history
-            }
+            name="medical_history_encrypted"
+            value={memberForm.medical_history_encrypted}
             onChange={handleMemberInput}
             placeholder="Nhập bệnh sử..."
           />
@@ -944,10 +964,9 @@ function Dashboard() {
                       key={schedule.id}
                     >
                       <h3>
-                        Thuốc ID:{" "}
-                        {
-                          schedule.medication_id
-                        }
+                        {medications.find(
+                          (medication) => medication.id === schedule.medication_id
+                        )?.name || "Không tìm thấy thuốc"}
                       </h3>
 
                       <p>
@@ -956,15 +975,15 @@ function Dashboard() {
                           schedule.reminder_times
                         )
                           ? schedule.reminder_times.join(
-                              ", "
-                            )
+                            ", "
+                          )
                           : ""}
                       </p>
 
                       <p>
                         Chu kỳ:{" "}
                         {schedule.frequency_days ===
-                        1
+                          1
                           ? "Mỗi ngày"
                           : `Mỗi ${schedule.frequency_days} ngày`}
                       </p>
@@ -1265,17 +1284,17 @@ function Dashboard() {
                 {scheduleForm
                   .reminder_times
                   .length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      removeReminderTime(
-                        index
-                      )
-                    }
-                  >
-                    X
-                  </button>
-                )}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        removeReminderTime(
+                          index
+                        )
+                      }
+                    >
+                      X
+                    </button>
+                  )}
               </div>
             )
           )}
