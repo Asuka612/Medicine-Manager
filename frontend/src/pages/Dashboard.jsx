@@ -25,7 +25,15 @@ function Dashboard() {
   // =========================================================
   // MEMBER FORM
   // =========================================================
+  const handleLogout = () => {
+    // Xóa thông tin đăng nhập đang lưu
+    localStorage.removeItem("adminId");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
 
+    // Quay về trang đăng nhập
+    window.location.href = "/login";
+  };
   const [memberForm, setMemberForm] = useState({
     email: "",
     password: "",
@@ -621,6 +629,13 @@ function Dashboard() {
 
         <button className="sidebar-item">
           Cài đặt
+        </button>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="logout-button"
+        >
+          Đăng xuất
         </button>
       </nav>
     </aside>
