@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DisclaimerModal from '../components/DisclaimerModal';
-import '../styles/LoginPage.css'; // Trỏ ra ngoài thư mục styles
+import '../styles/LoginPage.css';
 
 export default function LoginPage() {
   const [isAccepted, setIsAccepted] = useState(false);
@@ -37,7 +37,8 @@ export default function LoginPage() {
         // Lưu thông tin user
         localStorage.setItem("user", JSON.stringify(data.user));
         
-        // Tải lại trang hoặc gọi hàm đổi màn hình để nhảy thẳng vào Dashboard
+        localStorage.setItem("admin_id", data.user.id);
+
         window.location.reload(); 
       } else {
         setIsLoginMode(true);

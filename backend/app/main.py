@@ -3,7 +3,6 @@ from app.api import members
 from app.api import medications
 from app.database import engine
 from app.api import schedules, medications, auth
-from app.api import schedules, medications, auth
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(title="Medicine Manager API", version="1.0")
 app.add_middleware(
@@ -16,7 +15,6 @@ app.add_middleware(
 app.include_router(schedules.router)
 app.include_router(members.router)
 app.include_router(medications.router)
-# app.include_router(auth.router)
 app.include_router(auth.router)
 @app.get("/")
 def read_root():
