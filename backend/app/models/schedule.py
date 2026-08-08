@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, Date, ForeignKey, JSON
+from sqlalchemy import Column, Integer, Date, ForeignKey, JSON, String
 from app.database import Base
+
 
 class Schedule(Base):
     __tablename__ = "schedules"
@@ -12,3 +13,7 @@ class Schedule(Base):
     frequency_days = Column(Integer)
     reminder_times = Column(JSON)
     start_date = Column(Date)
+
+    notification_message = Column(String(50))
+    reminder_before_minutes = Column(Integer)
+    end_date = Column(Date)

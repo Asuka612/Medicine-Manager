@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from app.api import members
+from app.api import medications
 from app.database import engine
 from app.api import schedules, medications, auth
 from app.api import schedules, medications, auth
@@ -12,7 +14,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(schedules.router)
-# app.include_router(medications.router)
+app.include_router(members.router)
+app.include_router(medications.router)
 # app.include_router(auth.router)
 app.include_router(auth.router)
 @app.get("/")
