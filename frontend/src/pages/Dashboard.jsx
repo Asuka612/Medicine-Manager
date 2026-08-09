@@ -67,7 +67,7 @@ function Dashboard() {
     start_date: "",
     end_date: "",
     reminder_before_minutes: 10,
-    notification_message: "💊 Đến giờ uống thuốc",
+    notification_message: " Đến giờ uống thuốc",
   });
 
   // =========================================================
@@ -468,22 +468,16 @@ function Dashboard() {
     try {
       const payload = {
         family_member_id: selectedMember.id,
-        medication_id: Number(
-          scheduleForm.medication_id
-        ),
-        frequency_days: Number(
-          scheduleForm.frequency_days
-        ),
-        reminder_times:
-          scheduleForm.reminder_times,
+        medication_id: Number(scheduleForm.medication_id),
+        frequency_days: Number(scheduleForm.frequency_days),
+        weekdays: [],
+        reminder_times: scheduleForm.reminder_times,
         start_date: scheduleForm.start_date,
-        end_date:
-          scheduleForm.end_date || null,
+        end_date: scheduleForm.end_date || null,
         reminder_before_minutes: Number(
           scheduleForm.reminder_before_minutes
         ),
-        notification_message:
-          scheduleForm.notification_message,
+        notification_message: scheduleForm.notification_message,
       };
 
       const response = await fetch(
@@ -500,10 +494,18 @@ function Dashboard() {
       const data = await response.json();
 
       if (!response.ok) {
+        console.log("Lỗi tạo lịch:", data);
+
+        const message =
+          typeof data.detail === "string"
+            ? data.detail
+            : JSON.stringify(data.detail);
+
         throw new Error(
-          data.detail || "Không thể tạo lịch."
+          message || "Không thể tạo lịch."
         );
       }
+
 
       alert("Tạo lịch thành công.");
 
@@ -516,7 +518,7 @@ function Dashboard() {
         end_date: "",
         reminder_before_minutes: 10,
         notification_message:
-          "💊 Đến giờ uống thuốc",
+          " Đến giờ uống thuốc",
       });
 
       setShowScheduleForm(false);
@@ -574,7 +576,7 @@ function Dashboard() {
       end_date: "",
       reminder_before_minutes: 10,
       notification_message:
-        "💊 Đến giờ uống thuốc",
+        " Đến giờ uống thuốc",
     });
 
     setShowScheduleForm(true);

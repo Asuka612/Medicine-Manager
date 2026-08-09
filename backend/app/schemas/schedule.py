@@ -9,6 +9,7 @@ class ScheduleCreate(BaseModel):
     frequency_days: int
     reminder_times: List[str]
     start_date: date
+    weekdays: List[int]
     end_date: date | None = None
     reminder_before_minutes: int = 10
     notification_message: str = "Tới giờ uống thuốc"
@@ -19,6 +20,7 @@ class ScheduleUpdate(BaseModel):
     frequency_days: int | None = None
     reminder_times: List[str] | None = None
     start_date: date | None = None
+    weekdays: List[int] | None = None
     end_date: date | None = None
     reminder_before_minutes: int | None = None
     notification_message: str | None = None
@@ -34,6 +36,6 @@ class ScheduleResponse(BaseModel):
     end_date: date | None
     reminder_before_minutes: int
     notification_message: str
-
+    weekdays: List[int]
     class Config:
         from_attributes = True

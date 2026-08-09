@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api import members
+from app.api import member_dashboard
 from app.api import medications
 from app.database import engine
 from app.api import schedules, medications, auth
@@ -16,6 +17,7 @@ app.include_router(schedules.router)
 app.include_router(members.router)
 app.include_router(medications.router)
 app.include_router(auth.router)
+app.include_router(member_dashboard.router)
 @app.get("/")
 def read_root():
     return {"message": "Hệ thống quản lý lịch dùng thuốc Backend đang hoạt động tốt!"}

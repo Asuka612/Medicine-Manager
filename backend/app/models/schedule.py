@@ -13,7 +13,7 @@ class Schedule(Base):
     frequency_days = Column(Integer)
     reminder_times = Column(JSON)
     start_date = Column(Date)
-
+    weekdays = Column(JSON)
     notification_message = Column(String(50))
     reminder_before_minutes = Column(Integer)
     end_date = Column(Date)

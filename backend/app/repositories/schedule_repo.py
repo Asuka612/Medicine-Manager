@@ -35,6 +35,7 @@ class ScheduleRepository:
         reminder_times: list,
         start_date,
         end_date,
+        weekdays: list,
         reminder_before_minutes: int,
         notification_message: str
     ):
@@ -43,6 +44,7 @@ class ScheduleRepository:
             medication_id=medication_id,
             frequency_days=frequency_days,
             reminder_times=reminder_times,
+            weekdays=weekdays,
             start_date=start_date,
             end_date=end_date,
             reminder_before_minutes=reminder_before_minutes,
@@ -62,13 +64,15 @@ class ScheduleRepository:
         frequency_days=None,
         reminder_times=None,
         start_date=None,
+        weekdays=None,
         end_date=None,
         reminder_before_minutes=None,
         notification_message=None
     ):
         if medication_id is not None:
             schedule.medication_id = medication_id
-
+        if weekdays is not None:
+            schedule.weekdays = weekdays
         if frequency_days is not None:
             schedule.frequency_days = frequency_days
 

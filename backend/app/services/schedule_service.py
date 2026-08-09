@@ -87,6 +87,7 @@ class ScheduleService:
             frequency_days=data.frequency_days,
             reminder_times=data.reminder_times,
             start_date=data.start_date,
+            weekdays=data.weekdays,
             end_date=data.end_date,
             notification_message=data.notification_message,
             reminder_before_minutes=data.reminder_before_minutes
@@ -194,7 +195,8 @@ class ScheduleService:
 
         if data.notification_message is not None:
             schedule.notification_message = data.notification_message
-
+        if data.weekdays is not None:
+            schedule.weekdays = data.weekdays
         if data.reminder_before_minutes is not None:
             if data.reminder_before_minutes < 0:
                 raise HTTPException(

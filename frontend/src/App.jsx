@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
+import MemberDashboard from "./pages/MemberDashboard";
 import './App.css';
 
 export default function App() {
@@ -8,15 +9,21 @@ export default function App() {
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
+
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
   }, []);
 
-  // Nếu chưa đăng nhập thì hiện trang Login, đăng nhập rồi thì hiện Dashboard
   return (
     <div className="app-container">
-      {!user ? <LoginPage /> : <Dashboard />}
+      {!user ? (
+        <LoginPage />
+      ) : user.role === "MEMBER" ? (
+        <MemberDashboard />
+      ) : (
+        <Dashboard />
+      )}
     </div>
   );
 }
