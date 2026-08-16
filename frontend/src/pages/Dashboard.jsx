@@ -767,86 +767,99 @@ function Dashboard() {
   // =========================================================
 
   const renderMemberForm = () => (
-    <section className="form-section">
-      <h2>THÊM THÀNH VIÊN</h2>
+  <div className="modal-overlay">
+    <div className="modal">
+      <div className="modal-header">
+        <h2>THÊM THÀNH VIÊN</h2>
 
-      <form onSubmit={handleAddMember}>
-        <div className="form-group">
-          <label>Email</label>
+        <button
+          type="button"
+          className="modal-close"
+          onClick={() => setShowMemberForm(false)}
+        >
+          ×
+        </button>
+      </div>
 
-          <input
-            type="email"
-            name="email"
-            value={memberForm.email}
-            onChange={handleMemberInput}
-            placeholder="member@gmail.com"
-          />
-          <label>Mật khẩu</label>
+      <div className="modal-body">
+        <form onSubmit={handleAddMember}>
+          {/* GIỮ NGUYÊN TOÀN BỘ phần form hiện tại của bạn ở đây */}
 
-          <input
-            type="password"
-            name="password"
-            value={memberForm.password}
-            onChange={handleMemberInput}
-            placeholder="Nhập mật khẩu"
-          />
-          <label>Họ tên</label>
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              value={memberForm.email}
+              onChange={handleMemberInput}
+              placeholder="member@gmail.com"
+            />
+          </div>
 
-          <input
-            type="text"
-            name="full_name"
-            value={memberForm.full_name}
-            onChange={handleMemberInput}
-            placeholder="Nguyễn Văn Bé"
-          />
-        </div>
+          <div className="form-group">
+            <label>Mật khẩu</label>
+            <input
+              type="password"
+              name="password"
+              value={memberForm.password}
+              onChange={handleMemberInput}
+              placeholder="Nhập mật khẩu"
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Quan hệ</label>
+          <div className="form-group">
+            <label>Họ tên</label>
+            <input
+              type="text"
+              name="full_name"
+              value={memberForm.full_name}
+              onChange={handleMemberInput}
+              placeholder="Nguyễn Văn Bé"
+            />
+          </div>
 
-          <input
-            type="text"
-            name="relationship"
-            value={
-              memberForm.relationship
-            }
-            onChange={handleMemberInput}
-            placeholder="Con trai"
-          />
-        </div>
+          <div className="form-group">
+            <label>Quan hệ</label>
+            <input
+              type="text"
+              name="relationship"
+              value={memberForm.relationship}
+              onChange={handleMemberInput}
+              placeholder="Con trai"
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Bệnh sử</label>
+          <div className="form-group">
+            <label>Bệnh sử</label>
+            <textarea
+              name="medical_history_encrypted"
+              value={memberForm.medical_history_encrypted}
+              onChange={handleMemberInput}
+              placeholder="Nhập bệnh sử..."
+            />
+          </div>
 
-          <textarea
-            name="medical_history_encrypted"
-            value={memberForm.medical_history_encrypted}
-            onChange={handleMemberInput}
-            placeholder="Nhập bệnh sử..."
-          />
-        </div>
+          <div className="form-actions">
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setShowMemberForm(false)}
+            >
+              Hủy
+            </button>
 
-        <div className="form-actions">
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() =>
-              setShowMemberForm(false)
-            }
-          >
-            Hủy
-          </button>
-
-          <button
-            type="submit"
-            className="primary-button"
-          >
-            Lưu thành viên
-          </button>
-        </div>
-      </form>
-    </section>
-  );
+            <button
+              type="submit"
+              className="primary-button"
+            >
+              Lưu thành viên
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+);
 
   // =========================================================
   // MEMBER DETAIL
@@ -1051,360 +1064,277 @@ function Dashboard() {
   // =========================================================
 
   const renderMedicationForm = () => (
-    <div className="form-section">
-      <h3>THÊM THUỐC</h3>
+  <div className="modal-overlay">
+    <div className="modal">
+      <div className="modal-header">
+        <h2>THÊM THUỐC</h2>
 
-      <form
-        onSubmit={handleAddMedication}
-      >
-        <div className="form-group">
-          <label>Tên thuốc</label>
+        <button
+          type="button"
+          className="modal-close"
+          onClick={() => setShowMedicationForm(false)}
+        >
+          ×
+        </button>
+      </div>
 
-          <input
-            type="text"
-            name="name"
-            value={medicationForm.name}
-            onChange={handleMedicationInput}
-            placeholder="Paracetamol"
-          />
-        </div>
+      <div className="modal-body">
+        <form onSubmit={handleAddMedication}>
 
-        <div className="form-group">
-          <label>Liều lượng</label>
+          <div className="form-group">
+            <label>Tên thuốc</label>
+            <input
+              type="text"
+              name="name"
+              value={medicationForm.name}
+              onChange={handleMedicationInput}
+              placeholder="Paracetamol"
+            />
+          </div>
 
-          <input
-            type="text"
-            name="dosage"
-            value={medicationForm.dosage}
-            onChange={handleMedicationInput}
-            placeholder="500mg"
-          />
-        </div>
+          <div className="form-group">
+            <label>Liều lượng</label>
+            <input
+              type="text"
+              name="dosage"
+              value={medicationForm.dosage}
+              onChange={handleMedicationInput}
+              placeholder="500mg"
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Số lượng tồn kho</label>
+          <div className="form-group">
+            <label>Mô tả</label>
+            <textarea
+              name="description"
+              value={medicationForm.description}
+              onChange={handleMedicationInput}
+              placeholder="Mô tả thuốc..."
+            />
+          </div>
 
-          <input
-            type="number"
-            name="stock_quantity"
-            value={
-              medicationForm.stock_quantity
-            }
-            onChange={handleMedicationInput}
-            min="0"
-          />
-        </div>
+          <div className="form-actions">
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setShowMedicationForm(false)}
+            >
+              Hủy
+            </button>
 
-        <div className="form-group">
-          <label>Ngưỡng cảnh báo</label>
+            <button type="submit" className="primary-button">
+              Lưu thuốc
+            </button>
+          </div>
 
-          <input
-            type="number"
-            name="min_threshold"
-            value={
-              medicationForm.min_threshold
-            }
-            onChange={handleMedicationInput}
-            min="0"
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Ngày hết hạn</label>
-
-          <input
-            type="date"
-            name="expiry_date"
-            value={
-              medicationForm.expiry_date
-            }
-            onChange={handleMedicationInput}
-          />
-        </div>
-
-        <div className="form-actions">
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() =>
-              setShowMedicationForm(false)
-            }
-          >
-            Hủy
-          </button>
-
-          <button
-            type="submit"
-            className="primary-button"
-          >
-            Lưu thuốc
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  );
+  </div>
+);
 
   // =========================================================
   // SCHEDULE FORM
   // =========================================================
 
   const renderScheduleForm = () => (
-    <div className="schedule-form-section">
-      <h2>
-        TẠO LỊCH UỐNG THUỐC
-      </h2>
+  <div className="modal-overlay">
+    <div className="modal modal-large">
 
-      <form
-        onSubmit={handleAddSchedule}
-      >
-        <div className="form-group">
-          <label>Thành viên</label>
+      <div className="modal-header">
+        <h2>THÊM LỊCH UỐNG THUỐC</h2>
 
-          <select
-            name="family_member_id"
-            value={
-              scheduleForm.family_member_id ||
-              selectedMember?.id ||
-              ""
-            }
-            onChange={
-              handleScheduleMemberChange
-            }
-          >
-            <option value="">
-              -- Chọn thành viên --
-            </option>
+        <button
+          type="button"
+          className="modal-close"
+          onClick={() => setShowScheduleForm(false)}
+        >
+          ×
+        </button>
+      </div>
 
-            {members.map((member) => (
-              <option
-                key={member.id}
-                value={member.id}
-              >
-                {member.full_name}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="modal-body">
+        <form onSubmit={handleAddSchedule}>
 
-        <div className="form-group">
-          <label>Thuốc</label>
+          <div className="form-group">
+            <label>Thành viên</label>
 
-          <select
-            name="medication_id"
-            value={
-              scheduleForm.medication_id
-            }
-            onChange={
-              handleScheduleMedicationChange
-            }
-          >
-            <option value="">
-              -- Chọn thuốc --
-            </option>
+            <select
+              name="family_member_id"
+              value={scheduleForm.family_member_id}
+              onChange={handleScheduleInput}
+            >
+              <option value="">-- Chọn thành viên --</option>
 
-            {medications.map(
-              (medication) => (
-                <option
-                  key={medication.id}
-                  value={medication.id}
-                >
-                  {medication.name}{" "}
-                  {medication.dosage}
+              {members.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.full_name}
                 </option>
-              )
-            )}
-          </select>
-        </div>
+              ))}
+            </select>
+          </div>
 
-        <div className="form-group">
-          <label>Ngày bắt đầu</label>
+          <div className="form-group">
+            <label>Thuốc</label>
 
-          <input
-            type="date"
-            name="start_date"
-            value={
-              scheduleForm.start_date
-            }
-            onChange={
-              handleScheduleInput
-            }
-          />
-        </div>
+            <select
+              name="medication_id"
+              value={scheduleForm.medication_id}
+              onChange={handleScheduleInput}
+            >
+              <option value="">-- Chọn thuốc --</option>
 
-        <div className="form-group">
-          <label>Ngày kết thúc</label>
+              {medications.map((medication) => (
+                <option key={medication.id} value={medication.id}>
+                  {medication.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <input
-            type="date"
-            name="end_date"
-            value={
-              scheduleForm.end_date
-            }
-            onChange={
-              handleScheduleInput
-            }
-          />
-        </div>
+          <div className="form-group">
+            <label>Tần suất</label>
 
-        <div className="form-group">
-          <label>Chu kỳ uống</label>
+            <input
+              type="number"
+              name="frequency_days"
+              min="1"
+              value={scheduleForm.frequency_days}
+              onChange={handleScheduleInput}
+            />
+          </div>
 
-          <select
-            name="frequency_days"
-            value={
-              scheduleForm.frequency_days
-            }
-            onChange={
-              handleScheduleInput
-            }
-          >
-            <option value="1">
-              Mỗi ngày
-            </option>
+          <div className="form-group">
+            <label>Thời gian uống</label>
 
-            <option value="2">
-              Mỗi 2 ngày
-            </option>
+            {scheduleForm.reminder_times.map((time, index) => (
+              <div className="time-input-row" key={index}>
 
-            <option value="3">
-              Mỗi 3 ngày
-            </option>
-
-            <option value="7">
-              Mỗi 7 ngày
-            </option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>
-            Thời gian uống
-          </label>
-
-          {scheduleForm.reminder_times.map(
-            (time, index) => (
-              <div
-                className="time-input-row"
-                key={index}
-              >
                 <input
                   type="time"
                   value={time}
-                  onChange={(e) =>
-                    handleReminderTimeChange(
-                      index,
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => {
+                    const newTimes = [
+                      ...scheduleForm.reminder_times
+                    ];
+
+                    newTimes[index] = e.target.value;
+
+                    setScheduleForm({
+                      ...scheduleForm,
+                      reminder_times: newTimes
+                    });
+                  }}
                 />
 
-                {scheduleForm
-                  .reminder_times
-                  .length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        removeReminderTime(
-                          index
-                        )
-                      }
-                    >
-                      X
-                    </button>
-                  )}
+                {scheduleForm.reminder_times.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newTimes =
+                        scheduleForm.reminder_times.filter(
+                          (_, i) => i !== index
+                        );
+
+                      setScheduleForm({
+                        ...scheduleForm,
+                        reminder_times: newTimes
+                      });
+                    }}
+                  >
+                    ×
+                  </button>
+                )}
+
               </div>
-            )
-          )}
+            ))}
 
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={
-              addReminderTime
-            }
-          >
-            + Thêm giờ
-          </button>
-        </div>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() =>
+                setScheduleForm({
+                  ...scheduleForm,
+                  reminder_times: [
+                    ...scheduleForm.reminder_times,
+                    "08:00"
+                  ]
+                })
+              }
+            >
+              + Thêm giờ uống
+            </button>
+          </div>
 
-        <hr />
+          <div className="form-group">
+            <label>Ngày bắt đầu</label>
 
-        <h3>THÔNG BÁO</h3>
+            <input
+              type="date"
+              name="start_date"
+              value={scheduleForm.start_date}
+              onChange={handleScheduleInput}
+            />
+          </div>
 
-        <div className="form-group">
-          <label>
-            Nhắc trước
-          </label>
+          <div className="form-group">
+            <label>Ngày kết thúc</label>
 
-          <select
-            name="reminder_before_minutes"
-            value={
-              scheduleForm.reminder_before_minutes
-            }
-            onChange={
-              handleScheduleInput
-            }
-          >
-            <option value="0">
-              Đúng giờ
-            </option>
+            <input
+              type="date"
+              name="end_date"
+              value={scheduleForm.end_date}
+              onChange={handleScheduleInput}
+            />
+          </div>
 
-            <option value="5">
-              5 phút
-            </option>
+          <div className="form-group">
+            <label>Nhắc trước (phút)</label>
 
-            <option value="10">
-              10 phút
-            </option>
+            <input
+              type="number"
+              name="reminder_before_minutes"
+              min="0"
+              value={scheduleForm.reminder_before_minutes}
+              onChange={handleScheduleInput}
+            />
+          </div>
 
-            <option value="15">
-              15 phút
-            </option>
+          <div className="form-group">
+            <label>Thông báo</label>
 
-            <option value="30">
-              30 phút
-            </option>
-          </select>
-        </div>
+            <textarea
+              name="notification_message"
+              value={scheduleForm.notification_message}
+              onChange={handleScheduleInput}
+              placeholder="Đến giờ uống thuốc"
+            />
+          </div>
 
-        <div className="form-group">
-          <label>
-            Nội dung thông báo
-          </label>
+          <div className="form-actions">
 
-          <textarea
-            name="notification_message"
-            value={
-              scheduleForm.notification_message
-            }
-            onChange={
-              handleScheduleInput
-            }
-            rows="5"
-          />
-        </div>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setShowScheduleForm(false)}
+            >
+              Hủy
+            </button>
 
-        <div className="form-actions">
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() =>
-              setShowScheduleForm(false)
-            }
-          >
-            Hủy
-          </button>
+            <button
+              type="submit"
+              className="primary-button"
+            >
+              Lưu lịch
+            </button>
 
-          <button
-            type="submit"
-            className="primary-button"
-          >
-            Lưu lịch
-          </button>
-        </div>
-      </form>
+          </div>
+
+        </form>
+      </div>
     </div>
-  );
+  </div>
+);
 
   // =========================================================
   // LOADING
