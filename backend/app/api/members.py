@@ -8,8 +8,6 @@ from app.schemas.member import (
 )
 from app.services.member_service import MemberService
 from app.models.user import User
-
-
 router = APIRouter(
     prefix="/api/members",
     tags=["Family Members"]

@@ -1,9 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.medication import Medication
-
-
 class MedicationRepository:
-
     @staticmethod
     def get_medications_by_member(
         db: Session,
@@ -16,7 +13,6 @@ class MedicationRepository:
             )
             .all()
         )
-
     @staticmethod
     def get_medication_by_id(
         db: Session,

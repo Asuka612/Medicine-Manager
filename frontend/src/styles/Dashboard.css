@@ -83,13 +83,15 @@ body {
 }
 
 /* ================================
-   MAIN
+   MAIN CONTENT & LAYOUT
 ================================ */
 
 .dashboard-main {
   flex: 1;
+  width: calc(100% - 250px);
   margin-left: 250px;
   min-width: 0;
+  background: #f5f7fb;
 }
 
 .dashboard-header {
@@ -114,6 +116,7 @@ body {
 
 .dashboard-content {
   width: 100%;
+  max-width: 100%;
   padding: 28px 32px 40px;
 }
 
@@ -127,61 +130,89 @@ body {
 }
 
 /* ================================
-   OVERVIEW
+   OVERVIEW & SECTIONS
 ================================ */
 
-.overview-section {
-  margin-bottom: 30px;
+.overview-section,
+.members-section {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 36px;
 }
 
 .overview-section h1 {
-  margin: 0 0 18px;
-  font-size: 28px;
+  margin: 0 0 20px;
+  font-size: 30px;
+  color: #111827;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 22px;
   color: #111827;
 }
 
 .overview-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 20px;
+  width: 100%;
 }
 
 .overview-card {
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: 14px;
+  padding: 26px 28px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  transition: all 0.3s ease;
+}
+
+/* Thanh màu điểm nhấn bên trái card tổng quan */
+.overview-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #2563eb;
+}
+
+.overview-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px -3px rgba(37, 99, 235, 0.08);
+  border-color: #93c5fd;
 }
 
 .overview-number {
   display: block;
-  font-size: 30px;
+  font-size: 38px;
   font-weight: 700;
-  color: #111827;
-  margin-bottom: 5px;
+  color: #1e293b;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
 }
 
 .overview-label {
   font-size: 14px;
-  color: #6b7280;
-}
-
-/* ================================
-   SECTION
-================================ */
-
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  margin-bottom: 14px;
-}
-
-.section-header h2 {
-  margin: 0;
-  font-size: 20px;
-  color: #111827;
+  font-weight: 500;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* ================================
@@ -190,35 +221,46 @@ body {
 
 .member-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
 }
 
 .member-card {
   background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 9px;
-  padding: 15px 17px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 22px;
+  min-height: 110px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+  transition: all 0.25s ease;
 }
 
 .member-card:hover {
-  border-color: #bfdbfe;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
 }
 
 .member-info h3 {
-  margin: 0 0 5px;
-  font-size: 16px;
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .member-info p {
   margin: 0;
-  color: #6b7280;
-  font-size: 14px;
+  color: #64748b;
+  font-size: 13px;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
 }
 
 /* ================================
@@ -272,8 +314,9 @@ body {
 
 .member-detail {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 18px;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 24px;
+  width: 100%;
   align-items: start;
 }
 
@@ -282,19 +325,21 @@ body {
 .schedule-section {
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
 }
 
 .member-profile {
   grid-row: span 2;
+  min-height: 180px;
 }
 
 .member-profile h2,
 .medication-section h2,
 .schedule-section h2 {
-  margin: 0 0 15px;
-  font-size: 19px;
+  margin: 0 0 18px;
+  font-size: 21px;
 }
 
 .member-profile p {
@@ -309,23 +354,25 @@ body {
 
 .medication-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
 }
 
 .medication-card {
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 14px;
+  border-radius: 9px;
+  padding: 18px;
+  min-height: 150px;
 }
 
 .medication-card h3 {
-  margin: 0 0 8px;
-  font-size: 16px;
+  margin: 0 0 9px;
+  font-size: 17px;
 }
 
 .medication-card p {
-  margin: 6px 0;
+  margin: 7px 0;
   color: #6b7280;
   font-size: 14px;
 }
@@ -337,22 +384,24 @@ body {
 .schedule-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
+  width: 100%;
 }
 
 .schedule-card {
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 14px;
+  border-radius: 9px;
+  padding: 18px;
+  min-height: 140px;
 }
 
 .schedule-card h3 {
-  margin: 0 0 9px;
-  font-size: 16px;
+  margin: 0 0 10px;
+  font-size: 17px;
 }
 
 .schedule-card p {
-  margin: 6px 0;
+  margin: 7px 0;
   color: #4b5563;
   font-size: 14px;
 }
@@ -491,39 +540,35 @@ body {
 }
 
 /* ================================
-   MOBILE
+   RESPONSIVE: TABLET
 ================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .dashboard-sidebar {
-    width: 210px;
+    width: 220px;
   }
 
   .dashboard-main {
-    margin-left: 210px;
+    width: calc(100% - 220px);
+    margin-left: 220px;
   }
 
-  .dashboard-content {
-    padding: 24px;
-  }
-
-  .member-list,
-  .schedule-list {
-    grid-template-columns: 1fr;
-  }
-
-  .medication-list {
+  .member-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .member-detail {
-    grid-template-columns: 1fr;
+  .medication-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .member-profile {
-    grid-row: auto;
+  .member-detail {
+    grid-template-columns: 260px minmax(0, 1fr);
   }
 }
+
+/* ================================
+   RESPONSIVE: MOBILE
+================================ */
 
 @media (max-width: 700px) {
   .dashboard-container {
@@ -548,8 +593,8 @@ body {
   }
 
   .sidebar-item {
-    white-space: nowrap;
     width: auto;
+    white-space: nowrap;
   }
 
   .logout-button {
@@ -557,6 +602,7 @@ body {
   }
 
   .dashboard-main {
+    width: 100%;
     margin-left: 0;
   }
 
@@ -565,7 +611,7 @@ body {
   }
 
   .dashboard-content {
-    padding: 20px 16px;
+    padding: 20px 16px 30px;
   }
 
   .overview-cards {
@@ -576,13 +622,26 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .member-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .member-profile {
+    grid-row: auto;
+  }
+
   .medication-list {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-list {
     grid-template-columns: 1fr;
   }
 
   .section-header {
     align-items: flex-start;
     flex-direction: column;
+    gap: 10px;
   }
 
   .modal-overlay {
@@ -591,6 +650,7 @@ body {
   }
 
   .modal {
+    width: 100%;
     max-height: 94vh;
     border-radius: 12px 12px 0 0;
   }

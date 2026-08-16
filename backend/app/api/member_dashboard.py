@@ -22,11 +22,6 @@ def get_member_dashboard(
     week_start: date | None = None,
     db: Session = Depends(get_db)
 ):
-
-    # ==========================================
-    # 1. Kiểm tra member
-    # ==========================================
-
     member = (
         db.query(FamilyMember)
         .filter(FamilyMember.id == family_member_id)
