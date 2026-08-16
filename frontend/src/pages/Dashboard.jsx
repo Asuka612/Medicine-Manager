@@ -98,40 +98,40 @@ function Dashboard() {
     }
   };
   const handleDeleteSchedule = async (scheduleId) => {
-  const confirmed = window.confirm(
-    "Bạn có chắc muốn xóa lịch uống thuốc này không? Nhật ký uống thuốc của lịch này cũng sẽ bị xóa."
-  );
-
-  if (!confirmed) return;
-
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/api/schedules/${scheduleId}?admin_id=${adminId}`,
-      {
-        method: "DELETE",
-      }
+    const confirmed = window.confirm(
+      "Bạn có chắc muốn xóa lịch uống thuốc này không? Nhật ký uống thuốc của lịch này cũng sẽ bị xóa."
     );
 
-    const data = await response.json();
+    if (!confirmed) return;
 
-    if (!response.ok) {
-      throw new Error(
-        data.detail || "Xóa lịch uống thất bại."
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/schedules/${scheduleId}?admin_id=${adminId}`,
+        {
+          method: "DELETE",
+        }
       );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail || "Xóa lịch uống thất bại."
+        );
+      }
+
+      alert(data.message || "Xóa lịch uống thành công.");
+
+      // Load lại dữ liệu member hiện tại
+      if (selectedMember) {
+        await loadMemberData(selectedMember);
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
-
-    alert(data.message || "Xóa lịch uống thành công.");
-
-    // Load lại dữ liệu member hiện tại
-    if (selectedMember) {
-      await loadMemberData(selectedMember);
-    }
-
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
-};
+  };
   // =========================================================
   // CHECK ADMIN
   // =========================================================
@@ -947,9 +947,11 @@ function Dashboard() {
                 "Không có"}
             </p>
             <button
+              type="button"
+              className="delete-button"
               onClick={() => handleDeleteMember(selectedMember.id)}
             >
-              Xóa
+              Xóa thành viên
             </button>
           </div>
 
@@ -1010,9 +1012,11 @@ function Dashboard() {
                           "Không có"}
                       </p>
                       <button
+                        type="button"
+                        className="delete-button"
                         onClick={() => handleDeleteMedication(medication.id)}
                       >
-                        Xóa
+                        Xóa thuốc
                       </button>
                     </div>
                   )
@@ -1102,8 +1106,9 @@ function Dashboard() {
                         {
                           schedule.notification_message
                         }
-                      </p>  <button
+                      </p> <button
                         type="button"
+                        className="delete-button"
                         onClick={() => handleDeleteSchedule(schedule.id)}
                       >
                         Xóa lịch
