@@ -6,6 +6,8 @@ from app.models.member import FamilyMember
 from app.models.medication import Medication
 from app.repositories.medication_repo import MedicationRepository
 from app.schemas.medication import MedicationCreate, MedicationUpdate
+from app.models.schedule import Schedule
+from app.models.log import Log
 
 
 class MedicationService:
@@ -183,7 +185,35 @@ class MedicationService:
         )
 
         try:
+            # Lấy tất cả schedule sử dụng thuốc này
+            schedules = (
+                db.query(Schedule)
+                .filter(
+                    Schedule.medication_id == medication.id
+                )
+                .all()
+            )
+
+            schedule_ids = [schedule.id for schedule in schedules]
+
+            # Xóa log của các schedule
+            if schedule_ids:
+                db.query(Log).filter(
+                    Log.schedule_id.in_(schedule_ids)
+                ).delete(
+                    synchronize_session=False
+                )
+
+                # Xóa các schedule
+                db.query(Schedule).filter(
+                    Schedule.id.in_(schedule_ids)
+                ).delete(
+                    synchronize_session=False
+                )
+
+            # Xóa thuốc
             db.delete(medication)
+
             db.commit()
 
             return {

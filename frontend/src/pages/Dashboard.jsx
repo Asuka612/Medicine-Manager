@@ -62,7 +62,76 @@ function Dashboard() {
     reminder_before_minutes: 10,
     notification_message: " Đến giờ uống thuốc",
   });
+  const handleDeleteMedication = async (medicationId) => {
+    const confirmed = window.confirm(
+      "Bạn có chắc muốn xóa thuốc này không? Các lịch uống và nhật ký liên quan cũng sẽ bị xóa."
+    );
 
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/medications/${medicationId}?admin_id=${adminId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail || "Xóa thuốc thất bại."
+        );
+      }
+
+      alert(data.message || "Xóa thuốc thành công.");
+
+      // Load lại thuốc + lịch uống của member hiện tại
+      if (selectedMember) {
+        await loadMemberData(selectedMember);
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+  const handleDeleteSchedule = async (scheduleId) => {
+  const confirmed = window.confirm(
+    "Bạn có chắc muốn xóa lịch uống thuốc này không? Nhật ký uống thuốc của lịch này cũng sẽ bị xóa."
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/schedules/${scheduleId}?admin_id=${adminId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.detail || "Xóa lịch uống thất bại."
+      );
+    }
+
+    alert(data.message || "Xóa lịch uống thành công.");
+
+    // Load lại dữ liệu member hiện tại
+    if (selectedMember) {
+      await loadMemberData(selectedMember);
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+};
   // =========================================================
   // CHECK ADMIN
   // =========================================================
@@ -245,7 +314,43 @@ function Dashboard() {
       [name]: value,
     }));
   };
+  const handleDeleteMember = async (memberId) => {
+    const confirmed = window.confirm(
+      "Bạn có chắc muốn xóa thành viên này không? Toàn bộ thuốc, lịch uống và nhật ký liên quan cũng sẽ bị xóa."
+    );
 
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/members/${memberId}?admin_id=${adminId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail || "Xóa thành viên thất bại."
+        );
+      }
+
+      alert(data.message || "Xóa thành viên thành công.");
+
+      // Xóa dữ liệu đang hiển thị
+      setSelectedMember(null);
+      setMedications([]);
+      setSchedules([]);
+      setCurrentPage("dashboard");
+      await loadMembers();
+
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
   const handleAddMedication = async (e) => {
     e.preventDefault();
 
@@ -841,6 +946,11 @@ function Dashboard() {
               {selectedMember.medical_history ||
                 "Không có"}
             </p>
+            <button
+              onClick={() => handleDeleteMember(selectedMember.id)}
+            >
+              Xóa
+            </button>
           </div>
 
           <div className="medication-section">
@@ -899,10 +1009,17 @@ function Dashboard() {
                         {medication.expiry_date ||
                           "Không có"}
                       </p>
+                      <button
+                        onClick={() => handleDeleteMedication(medication.id)}
+                      >
+                        Xóa
+                      </button>
                     </div>
                   )
                 )}
+
               </div>
+
             )}
 
             {showMedicationForm &&
@@ -919,6 +1036,7 @@ function Dashboard() {
               >
                 + Tạo lịch
               </button>
+
             </div>
 
             {schedules.length === 0 ? (
@@ -984,7 +1102,12 @@ function Dashboard() {
                         {
                           schedule.notification_message
                         }
-                      </p>
+                      </p>  <button
+                        type="button"
+                        onClick={() => handleDeleteSchedule(schedule.id)}
+                      >
+                        Xóa lịch
+                      </button>
                     </div>
                   )
                 )}

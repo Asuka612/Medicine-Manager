@@ -5,6 +5,9 @@ from app.models.user import User
 from app.models.member import FamilyMember
 from app.repositories.member_repo import MemberRepository
 from app.schemas.member import MemberCreate, MemberUpdate
+from app.models.medication import Medication
+from app.models.schedule import Schedule
+from app.models.log import Log
 
 
 class MemberService:
@@ -161,8 +164,43 @@ class MemberService:
         )
 
         try:
+            # 1. Lấy tất cả schedule của member
+            schedules = (
+                db.query(Schedule)
+                .filter(
+                    Schedule.family_member_id == member.id
+                )
+                .all()
+            )
+
+            schedule_ids = [schedule.id for schedule in schedules]
+
+            # 2. Xóa toàn bộ log của các schedule
+            if schedule_ids:
+                db.query(Log).filter(
+                    Log.schedule_id.in_(schedule_ids)
+                ).delete(
+                    synchronize_session=False
+                )
+
+                # 3. Xóa toàn bộ schedule
+                db.query(Schedule).filter(
+                    Schedule.id.in_(schedule_ids)
+                ).delete(
+                    synchronize_session=False
+                )
+
+            # 4. Xóa toàn bộ medication của member
+            db.query(Medication).filter(
+                Medication.family_member_id == member.id
+            ).delete(
+                synchronize_session=False
+            )
+
+            # 5. Xóa family member
             db.delete(member)
 
+            # 6. Xóa user MEMBER tương ứng
             if user:
                 db.delete(user)
 

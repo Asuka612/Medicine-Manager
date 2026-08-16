@@ -195,8 +195,10 @@ class ScheduleService:
 
         if data.notification_message is not None:
             schedule.notification_message = data.notification_message
+
         if data.weekdays is not None:
             schedule.weekdays = data.weekdays
+
         if data.reminder_before_minutes is not None:
             if data.reminder_before_minutes < 0:
                 raise HTTPException(
@@ -210,30 +212,6 @@ class ScheduleService:
         db.refresh(schedule)
 
         return schedule
-
-    @staticmethod
-    def delete_schedule(
-        db: Session,
-        admin_id: int,
-        schedule_id: int
-    ):
-        schedule = ScheduleService.get_schedule(
-            db,
-            admin_id,
-            schedule_id
-        )
-
-        try:
-            db.delete(schedule)
-            db.commit()
-
-            return {
-                "message": "Xóa lịch uống thuốc thành công."
-            }
-
-        except Exception:
-            db.rollback()
-            raise
 
     @staticmethod
     def confirm_taken_log(
@@ -293,3 +271,36 @@ class ScheduleService:
             "current_stock": current_stock,
             "is_low_stock_warning": is_low_stock
         }
+
+    @staticmethod
+    def delete_schedule(
+        db: Session,
+        admin_id: int,
+        schedule_id: int
+    ):
+        schedule = ScheduleService.get_schedule(
+            db,
+            admin_id,
+            schedule_id
+        )
+
+        try:
+            # Xóa toàn bộ log của schedule
+            db.query(Log).filter(
+                Log.schedule_id == schedule.id
+            ).delete(
+                synchronize_session=False
+            )
+
+            # Xóa schedule
+            db.delete(schedule)
+
+            db.commit()
+
+            return {
+                "message": "Xóa lịch uống thuốc thành công."
+            }
+
+        except Exception:
+            db.rollback()
+            raise
