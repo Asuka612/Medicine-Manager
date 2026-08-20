@@ -12,7 +12,7 @@ def calculate_member_compliance(db: Session, family_member_id: int):
     if not schedule_ids:
         return {
             "family_member_id": family_member_id,
-            "compliance_rate": 100.0,
+            "compliance_rate": 0,
             "message": "Chưa có lịch trình nào."
         }
 
@@ -23,7 +23,7 @@ def calculate_member_compliance(db: Session, family_member_id: int):
     if total_logs == 0:
         return {
             "family_member_id": family_member_id,
-            "compliance_rate": 100.0,
+            "compliance_rate": 0,
             "message": "Chưa có nhật ký ghi nhận."
         }
 
