@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import LoginPage from './pages/LoginPage';
-import Dashboard from './pages/Dashboard';
+import React, { useEffect, useState } from "react";
+import LoginPage from "./pages/LoginPage";
+import Dashboard from "./pages/Dashboard";
 import MemberDashboard from "./pages/MemberDashboard";
-import './App.css';
+import Member from "./pages/Member";
+import "./App.css";
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -15,15 +17,51 @@ export default function App() {
     }
   }, []);
 
+  // =========================
+  // CHƯA ĐĂNG NHẬP
+  // =========================
+
+  if (!user) {
+    return (
+      <div className="app-container">
+        <LoginPage />
+      </div>
+    );
+  }
+
+  // =========================
+  // MEMBER ACCOUNT
+  // =========================
+
+  if (user.role === "MEMBER") {
+    return (
+      <div className="app-container">
+        <MemberDashboard />
+      </div>
+    );
+  }
+
+  // =========================
+  // ADMIN
+  // =========================
+
   return (
     <div className="app-container">
-      {!user ? (
-        <LoginPage />
-      ) : user.role === "MEMBER" ? (
-        <MemberDashboard />
+
+      {selectedMember ? (
+        <Member
+          member={selectedMember}
+          onBack={() => setSelectedMember(null)}
+        />
       ) : (
-        <Dashboard />
+        <Dashboard
+          onOpenMember={(member) => {
+            console.log("Đang mở member:", member);
+            setSelectedMember(member);
+          }}
+        />
       )}
+
     </div>
   );
 }
