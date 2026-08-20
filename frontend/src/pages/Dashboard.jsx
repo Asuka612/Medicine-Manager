@@ -3,7 +3,7 @@ import "../styles/Dashboard.css";
 import Member from "./Member";
 const API_BASE_URL = "http://127.0.0.1:8000";
 
-function Dashboard({ onOpenMember }) {
+function Dashboard({ onOpenMember, onOpenJournal }) {
   const adminId = localStorage.getItem("admin_id");
 
   const [members, setMembers] = useState([]);
@@ -152,7 +152,11 @@ function Dashboard({ onOpenMember }) {
           Thành viên
         </button>
 
-        <button className="sidebar-item" type="button">
+        <button
+          className="sidebar-item"
+          type="button"
+          onClick={onOpenJournal}
+        >
           Nhật ký
         </button>
 
