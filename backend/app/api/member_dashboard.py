@@ -15,7 +15,29 @@ router = APIRouter(
     tags=["Member Dashboard"]
 )
 
+@router.get("/user/{user_id}")
+def get_member_dashboard_by_user(
+    user_id: int,
+    week_start: date | None = None,
+    db: Session = Depends(get_db)
+):
+    member = (
+        db.query(FamilyMember)
+        .filter(FamilyMember.member_id == user_id)
+        .first()
+    )
 
+    if not member:
+        raise HTTPException(
+            status_code=404,
+            detail="Không tìm thấy thành viên tương ứng với tài khoản."
+        )
+
+    return get_member_dashboard(
+        family_member_id=member.id,
+        week_start=week_start,
+        db=db
+    )
 @router.get("/{family_member_id}")
 def get_member_dashboard(
     family_member_id: int,
@@ -44,9 +66,7 @@ def get_member_dashboard(
 
     week_end = week_start + timedelta(days=6)
 
-    # ==========================================
     # 3. Lấy schedules
-    # ==========================================
 
     schedules = (
         db.query(Schedule)

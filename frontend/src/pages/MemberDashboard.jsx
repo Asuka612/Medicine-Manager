@@ -9,7 +9,6 @@ import "../styles/MemberDashboard.css";
 const API_BASE_URL = "http://127.0.0.1:8000";
 
 
-const FAMILY_MEMBER_ID = 1;
 
 function formatDate(dateString) {
   if (!dateString) return "";
@@ -92,44 +91,74 @@ export default function MemberDashboard() {
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("dashboard");
   const [processingLogId, setProcessingLogId] = useState(null);
-
-  const loadDashboard = useCallback(async (showLoader = false) => {
-    try {
-      if (showLoader) {
-        setLoading(true);
-      } else {
-        setRefreshing(true);
+  const [userId, setUserId] = useState(null);
+  const loadDashboard = useCallback(
+    async (showLoader = false) => {
+      if (!userId) {
+        return;
       }
 
-      setError("");
+      try {
+        if (showLoader) {
+          setLoading(true);
+        } else {
+          setRefreshing(true);
+        }
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/member-dashboard/${FAMILY_MEMBER_ID}`
-      );
+        setError("");
 
-      if (!response.ok) {
-        throw new Error(
-          "Không thể tải dữ liệu dashboard thành viên."
+        const response = await fetch(
+          `${API_BASE_URL}/api/member-dashboard/user/${userId}`
         );
+
+        if (!response.ok) {
+          throw new Error(
+            "Không thể tải dữ liệu dashboard thành viên."
+          );
+        }
+
+        const result = await response.json();
+
+        setData(result);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [userId]
+  );
+  useEffect(() => {
+    if (userId) {
+      loadDashboard(true);
+    }
+  }, [userId, loadDashboard]);
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+
+    if (!savedUser) {
+      setError("Không tìm thấy thông tin tài khoản.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const user = JSON.parse(savedUser);
+
+      if (!user.id) {
+        throw new Error("Không tìm thấy user ID.");
       }
 
-      const result = await response.json();
-
-      setData(result);
+      setUserId(user.id);
     } catch (err) {
       console.error(err);
-      setError(err.message);
-    } finally {
+      setError("Dữ liệu tài khoản không hợp lệ.");
       setLoading(false);
-      setRefreshing(false);
     }
   }, []);
 
-  useEffect(() => {
-    loadDashboard(true);
-  }, [loadDashboard]);
-
-  // Refresh định kỳ để backend có cơ hội chuyển Pending -> Missed.
   useEffect(() => {
     const interval = setInterval(() => {
       loadDashboard(false);
@@ -147,7 +176,7 @@ export default function MemberDashboard() {
       setProcessingLogId(logId);
 
       const response = await fetch(
-        `${API_BASE_URL}/api/schedules/logs/${logId}/${action}`,
+        `${API_BASE_URL}/api/schedules/logs/${logId}/${action}?family_member_id=${data.member.id}`,
         {
           method: "POST",
         }
@@ -158,8 +187,8 @@ export default function MemberDashboard() {
       if (!response.ok) {
         throw new Error(
           result.detail ||
-            result.message ||
-            "Không thể cập nhật trạng thái."
+          result.message ||
+          "Không thể cập nhật trạng thái."
         );
       }
 
@@ -264,9 +293,8 @@ export default function MemberDashboard() {
       <nav className="member-sidebar-nav">
         <button
           type="button"
-          className={`member-sidebar-item ${
-            activeTab === "dashboard" ? "active" : ""
-          }`}
+          className={`member-sidebar-item ${activeTab === "dashboard" ? "active" : ""
+            }`}
           onClick={() => setActiveTab("dashboard")}
         >
           <span>⌂</span>
@@ -275,9 +303,8 @@ export default function MemberDashboard() {
 
         <button
           type="button"
-          className={`member-sidebar-item ${
-            activeTab === "schedule" ? "active" : ""
-          }`}
+          className={`member-sidebar-item ${activeTab === "schedule" ? "active" : ""
+            }`}
           onClick={() => setActiveTab("schedule")}
         >
           <span>▣</span>
@@ -286,9 +313,8 @@ export default function MemberDashboard() {
 
         <button
           type="button"
-          className={`member-sidebar-item ${
-            activeTab === "profile" ? "active" : ""
-          }`}
+          className={`member-sidebar-item ${activeTab === "profile" ? "active" : ""
+            }`}
           onClick={() => setActiveTab("profile")}
         >
           <span>○</span>
@@ -444,11 +470,10 @@ export default function MemberDashboard() {
 
               return (
                 <div
-                  className={`member-dose-card ${
-                    log.status === "Pending" && canAction
-                      ? "ready"
-                      : ""
-                  }`}
+                  className={`member-dose-card ${log.status === "Pending" && canAction
+                    ? "ready"
+                    : ""
+                    }`}
                   key={log.id}
                 >
                   <div className="member-dose-time">
@@ -562,8 +587,8 @@ export default function MemberDashboard() {
             <strong>
               {logs.length > 0
                 ? Math.round(
-                    (takenCount / logs.length) * 100
-                  )
+                  (takenCount / logs.length) * 100
+                )
                 : 0}
               %
             </strong>

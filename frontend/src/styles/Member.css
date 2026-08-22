@@ -1,0 +1,997 @@
+/* =========================================================
+   MEMBER PAGE - RESET
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #eef3f9;
+  color: #172033;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 80% 0%,
+      rgba(37, 99, 235, 0.05),
+      transparent 30%
+    ),
+    #eef3f9;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.dashboard-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 250px;
+  min-height: 100vh;
+
+  padding: 28px 15px;
+
+  background: #ffffff;
+  border-right: 1px solid #dfe6ef;
+
+  box-shadow: 5px 0 22px rgba(15, 23, 42, 0.035);
+
+  z-index: 50;
+}
+
+.sidebar-logo {
+  padding: 4px 10px;
+  margin-bottom: 36px;
+
+  color: #1f5fe8;
+
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+}
+
+.dashboard-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-item {
+  width: 100%;
+  min-height: 48px;
+
+  padding: 13px 15px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: transparent;
+  color: #566274;
+
+  text-align: left;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar-item:hover {
+  background: #f1f6ff;
+  color: #1f5fe8;
+}
+
+.sidebar-item.active {
+  background: #dceaff;
+  color: #1f5fe8;
+  font-weight: 700;
+}
+
+.logout-button {
+  width: 100%;
+  min-height: 48px;
+
+  margin-top: 28px;
+  padding: 12px 15px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: #e63647;
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #cf293a;
+}
+
+.logout-button:active {
+  transform: translateY(1px);
+}
+
+
+/* =========================================================
+   MAIN AREA
+========================================================= */
+
+.dashboard-main {
+  width: calc(100% - 250px);
+  min-width: 0;
+
+  margin-left: 250px;
+
+  flex: 1 1 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.dashboard-header {
+  width: 100%;
+  min-height: 78px;
+
+  padding: 0 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid #dfe6ef;
+
+  box-shadow:
+    0 2px 10px rgba(15, 23, 42, 0.02);
+}
+
+.header-title {
+  color: #172033;
+
+  font-size: 23px;
+  font-weight: 800;
+
+  letter-spacing: 0.2px;
+}
+
+.header-user {
+  color: #586579;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.dashboard-content {
+  width: calc(100% - 48px);
+  max-width: none;
+
+  margin: 0 auto;
+  padding: 32px 0 50px;
+}
+
+.error-message {
+  margin-bottom: 20px;
+  padding: 13px 16px;
+
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+
+  background: #fff1f2;
+  color: #be123c;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   MEMBER PAGE
+========================================================= */
+
+.member-page {
+  width: 100%;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.member-page .member-detail-header {
+  margin-bottom: 18px;
+}
+
+.member-page .back-button {
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: #2563eb;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+.member-page .back-button:hover {
+  color: #1d4ed8;
+}
+
+
+/* =========================================================
+   MEMBER DETAIL LAYOUT
+========================================================= */
+
+.member-page .member-detail {
+  display: grid;
+
+  grid-template-columns: 320px minmax(0, 1fr);
+
+  gap: 24px;
+
+  width: 100%;
+  max-width: none;
+
+  align-items: start;
+}
+
+/* =========================================================
+   MAIN SECTIONS
+========================================================= */
+
+.member-page .member-profile,
+.member-page .medication-section,
+.member-page .schedule-section {
+  width: 100%;
+
+  padding: 22px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce4ef;
+  border-radius: 16px;
+
+  box-shadow:
+    0 6px 18px rgba(15, 23, 42, 0.04);
+}
+
+
+/* =========================================================
+   MEMBER PROFILE
+========================================================= */
+
+.member-page .member-profile {
+  grid-row: span 2;
+
+  min-height: 225px;
+}
+
+.member-page .member-profile h2 {
+  margin: 0 0 20px;
+
+  color: #172033;
+
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.member-page .member-profile p {
+  margin: 10px 0;
+
+  color: #58677c;
+
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.member-page .member-profile strong {
+  color: #172033;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.member-page .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 18px;
+}
+
+.member-page .section-header h2 {
+  margin: 0;
+
+  color: #172033;
+
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.member-page .primary-button,
+.member-page .secondary-button,
+.member-page .delete-button {
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* Primary */
+
+.member-page .primary-button {
+  min-height: 40px;
+
+  padding: 9px 16px;
+
+  border: 1px solid transparent;
+  border-radius: 9px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  box-shadow:
+    0 5px 12px rgba(37, 99, 235, 0.18);
+}
+
+.member-page .primary-button:hover {
+  background: #1d4ed8;
+
+  box-shadow:
+    0 7px 15px rgba(37, 99, 235, 0.22);
+}
+
+.member-page .primary-button:active {
+  transform: translateY(1px);
+}
+
+
+/* Secondary */
+
+.member-page .secondary-button {
+  min-height: 40px;
+
+  padding: 9px 14px;
+
+  border: 1px solid #cfd8e5;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #3f4d62;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.member-page .secondary-button:hover {
+  background: #f7faff;
+  border-color: #aebed4;
+}
+
+.member-page .secondary-button:active {
+  transform: translateY(1px);
+}
+
+
+/* =========================================================
+   MEDICATION LIST
+========================================================= */
+
+.member-page .medication-list {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 16px;
+
+  width: 100%;
+}
+
+.member-page .medication-card {
+  min-height: 180px;
+
+  padding: 18px;
+
+  background: #fbfdff;
+
+  border: 1px solid #dce5f0;
+  border-radius: 12px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.member-page .medication-card:hover {
+  transform: translateY(-2px);
+
+  border-color: #bfd0e6;
+
+  box-shadow:
+    0 9px 20px rgba(15, 23, 42, 0.07);
+}
+
+.member-page .medication-card h3 {
+  margin: 0 0 12px;
+
+  color: #172033;
+
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.member-page .medication-card p {
+  margin: 7px 0;
+
+  color: #607086;
+
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.member-page .medication-card strong {
+  color: #172033;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SCHEDULE LIST
+========================================================= */
+
+.member-page .schedule-list {
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(280px, 1fr)
+  );
+
+  gap: 15px;
+
+  width: 100%;
+}
+
+.member-page .schedule-card {
+  min-height: 250px;
+
+  padding: 18px;
+
+  background: #fbfdff;
+
+  border: 1px solid #dce5f0;
+  border-radius: 12px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.member-page .schedule-card:hover {
+  transform: translateY(-2px);
+
+  border-color: #bfd0e6;
+
+  box-shadow:
+    0 9px 20px rgba(15, 23, 42, 0.07);
+}
+
+.member-page .schedule-card h3 {
+  margin: 0 0 12px;
+
+  color: #172033;
+
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.member-page .schedule-card p {
+  margin: 6px 0;
+
+  color: #607086;
+
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.member-page .delete-button {
+  margin-top: 12px;
+
+  padding: 8px 14px;
+
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #dc2626;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.member-page .delete-button:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.member-page .delete-button:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================================================
+   EMPTY STATES
+========================================================= */
+
+.member-page .medication-section > p,
+.member-page .schedule-section > p {
+  margin: 0;
+
+  padding: 28px 20px;
+
+  border: 1px dashed #cbd8e8;
+  border-radius: 12px;
+
+  background: #f8fafc;
+
+  color: #64748b;
+
+  text-align: center;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.member-page .modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.52);
+
+  backdrop-filter: blur(3px);
+}
+
+.member-page .modal {
+  width: min(620px, 100%);
+  max-height: 90vh;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #dbe4ef;
+  border-radius: 16px;
+
+  box-shadow:
+    0 20px 55px rgba(15, 23, 42, 0.22);
+}
+
+.member-page .modal-large {
+  width: min(720px, 100%);
+}
+
+.member-page .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  padding: 21px 24px;
+
+  background: #fbfcfe;
+
+  border-bottom: 1px solid #e4eaf2;
+}
+
+.member-page .modal-header h2 {
+  margin: 0;
+
+  color: #182235;
+
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.member-page .modal-close {
+  width: 40px;
+  height: 40px;
+
+  border: 1px solid #d6dfeb;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #6b7280;
+
+  font-size: 24px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.member-page .modal-close:hover {
+  background: #f4f7fb;
+  border-color: #c4d0de;
+}
+
+.member-page .modal-body {
+  max-height: calc(90vh - 90px);
+
+  padding: 24px;
+
+  overflow-y: auto;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.member-page .form-group {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  margin-bottom: 16px;
+}
+
+.member-page .form-group label {
+  color: #3d4a5f;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.member-page .form-group input,
+.member-page .form-group select,
+.member-page .form-group textarea {
+  width: 100%;
+
+  padding: 12px 13px;
+
+  border: 1px solid #cdd7e4;
+  border-radius: 9px;
+
+  outline: none;
+
+  background: #ffffff;
+  color: #1f2937;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.member-page .form-group input:focus,
+.member-page .form-group select:focus,
+.member-page .form-group textarea:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.member-page .form-group textarea {
+  min-height: 100px;
+
+  resize: vertical;
+}
+
+.member-page .form-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+
+/* =========================================================
+   TIME INPUTS
+========================================================= */
+
+.member-page .time-input-row {
+  display: flex;
+
+  gap: 8px;
+
+  margin-bottom: 8px;
+}
+
+.member-page .time-input-row input {
+  flex: 1;
+}
+
+.member-page .time-input-row button {
+  width: 42px;
+
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #dc2626;
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.member-page .time-input-row button:hover {
+  background: #fee2e2;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.dashboard-loading {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eef3f9;
+
+  color: #64748b;
+
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+  .dashboard-sidebar {
+    width: 220px;
+  }
+
+  .dashboard-main {
+    width: calc(100% - 220px);
+    margin-left: 220px;
+  }
+
+  .dashboard-content {
+    width: calc(100% - 40px);
+  }
+
+  .member-page .member-detail {
+    grid-template-columns: 270px minmax(0, 1fr);
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - SMALL TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .member-page .member-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .member-page .member-profile {
+    grid-row: auto;
+  }
+
+  .member-page .medication-list,
+  .member-page .schedule-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+  .dashboard-container {
+    display: block;
+  }
+
+  .dashboard-sidebar {
+    position: static;
+
+    width: 100%;
+    min-height: auto;
+
+    padding: 14px 16px;
+  }
+
+  .sidebar-logo {
+    margin-bottom: 16px;
+    font-size: 22px;
+  }
+
+  .dashboard-sidebar nav {
+    flex-direction: row;
+
+    gap: 6px;
+
+    overflow-x: auto;
+  }
+
+  .sidebar-item {
+    width: auto;
+
+    min-height: 44px;
+
+    white-space: nowrap;
+  }
+
+  .logout-button {
+    width: auto;
+    min-width: 110px;
+
+    margin-top: 10px;
+  }
+
+  .dashboard-main {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .dashboard-header {
+    min-height: 70px;
+
+    padding: 0 18px;
+  }
+
+  .header-title {
+    font-size: 18px;
+  }
+
+  .header-user {
+    font-size: 13px;
+  }
+
+  .dashboard-content {
+    width: calc(100% - 24px);
+
+    padding: 24px 0 34px;
+  }
+
+  .member-page .section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .member-page .section-header .primary-button {
+    width: 100%;
+  }
+
+  .member-page .member-profile,
+  .member-page .medication-section,
+  .member-page .schedule-section {
+    padding: 18px;
+  }
+
+  .member-page .modal-overlay {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .member-page .modal {
+    width: 100%;
+    max-height: 94vh;
+
+    border-radius: 16px 16px 0 0;
+  }
+
+  .member-page .modal-body {
+    max-height: calc(94vh - 90px);
+  }
+
+  .member-page .form-actions {
+    flex-direction: column;
+  }
+
+  .member-page .form-actions button {
+    width: 100%;
+  }
+}

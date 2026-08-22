@@ -5,7 +5,7 @@ from app.database import get_db
 from app.schemas.schedule import ScheduleCreate, ScheduleUpdate
 from app.services.schedule_service import ScheduleService
 from app.services.compliance_service import calculate_member_compliance
-
+from app.services.log_service import LogService
 router = APIRouter(
     prefix="/api/schedules",
     tags=["Schedules & Compliance"]
@@ -90,22 +90,26 @@ def delete_schedule(
 
 
 @router.post("/logs/{log_id}/take")
-def api_confirm_taken(
+def api_take_log(
     log_id: int,
+    family_member_id: int,
     db: Session = Depends(get_db)
 ):
-    return ScheduleService.take_log(
+    return LogService.take_log(
         db,
-        log_id
+        log_id,
+        family_member_id
     )
 @router.post("/logs/{log_id}/skip")
 def api_skip_log(
     log_id: int,
+    family_member_id: int,
     db: Session = Depends(get_db)
 ):
-    return ScheduleService.skip_log(
+    return LogService.skip_log(
         db,
-        log_id
+        log_id,
+        family_member_id
     )
 
 @router.get("/compliance/{member_id}")

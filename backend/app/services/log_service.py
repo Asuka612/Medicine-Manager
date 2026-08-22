@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 
 from app.models.log import Log
 from app.models.schedule import Schedule
-
+from app.models.member import FamilyMember
+from app.models.medication import Medication
+from fastapi import HTTPException
 
 class LogService:
 
@@ -127,3 +129,126 @@ class LogService:
         )
 
         db.commit()
+    @staticmethod
+    def get_member_log(
+        db: Session,
+        log_id: int,
+        family_member_id: int
+    ):
+        log = (
+            db.query(Log)
+            .join(
+                Schedule,
+                Log.schedule_id == Schedule.id
+            )
+            .filter(
+                Log.id == log_id,
+                Schedule.family_member_id == family_member_id
+            )
+            .first()
+        )
+
+        if not log:
+            raise HTTPException(
+                status_code=404,
+                detail="Không tìm thấy nhật ký hoặc nhật ký không thuộc thành viên này."
+            )
+
+        return log
+    @staticmethod
+    def take_log(
+        db: Session,
+        log_id: int,
+        family_member_id: int
+    ):
+        log = LogService.get_member_log(
+            db,
+            log_id,
+            family_member_id
+        )
+
+        if log.status != "Pending":
+            raise HTTPException(
+                status_code=400,
+                detail="Nhật ký này không còn ở trạng thái Pending."
+            )
+
+        now = datetime.now()
+
+        if now < log.scheduled_time:
+            raise HTTPException(
+                status_code=400,
+                detail="Chưa đến thời gian uống thuốc."
+            )
+
+        log.status = "Taken"
+        log.action_time = now
+
+        schedule = (
+            db.query(Schedule)
+            .filter(
+                Schedule.id == log.schedule_id
+            )
+            .first()
+        )
+
+        if schedule:
+            medication = (
+                db.query(Medication)
+                .filter(
+                    Medication.id == schedule.medication_id
+                )
+                .first()
+            )
+
+            if medication and medication.stock_quantity > 0:
+                medication.stock_quantity -= 1
+
+        db.commit()
+        db.refresh(log)
+
+        return {
+            "message": "Đã xác nhận uống thuốc.",
+            "log_id": log.id,
+            "status": log.status,
+            "action_time": log.action_time
+        }
+    @staticmethod
+    def skip_log(
+        db: Session,
+        log_id: int,
+        family_member_id: int
+    ):
+        log = LogService.get_member_log(
+            db,
+            log_id,
+            family_member_id
+        )
+
+        if log.status != "Pending":
+            raise HTTPException(
+                status_code=400,
+                detail="Nhật ký này không còn ở trạng thái Pending."
+            )
+
+        now = datetime.now()
+
+        if now < log.scheduled_time:
+            raise HTTPException(
+                status_code=400,
+                detail="Chưa đến thời gian uống thuốc."
+            )
+
+        log.status = "Skipped"
+        log.action_time = now
+
+        db.commit()
+        db.refresh(log)
+
+        return {
+            "message": "Đã bỏ qua liều thuốc.",
+            "log_id": log.id,
+            "status": log.status,
+            "action_time": log.action_time
+        }
+    

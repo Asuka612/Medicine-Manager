@@ -66,27 +66,9 @@ function Static({ onBack }) {
             type="button"
             onClick={onBack}
           >
-            ← Dashboard
+            Quay lại
           </button>
-
-          <button className="sidebar-item" type="button">
-            Thành viên
-          </button>
-
-          <button className="sidebar-item" type="button">
-            Nhật ký
-          </button>
-
-          <button
-            className="sidebar-item active"
-            type="button"
-          >
-            Thống kê
-          </button>
-
-          <button className="sidebar-item" type="button">
-            Cài đặt
-          </button>
+         
         </nav>
       </aside>
 

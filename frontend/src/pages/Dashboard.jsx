@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styles/Dashboard.css";
-import Member from "./Member";
+
 const API_BASE_URL = "http://127.0.0.1:8000";
 
 function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
@@ -9,7 +9,7 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [statistics, setStatistics] = useState(null);
   const [showMemberForm, setShowMemberForm] = useState(false);
 
   const [memberForm, setMemberForm] = useState({
@@ -37,7 +37,26 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
     }
 
     loadMembers();
+    loadStatistics();
   }, []);
+
+  const loadStatistics = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/statistics/?admin_id=${adminId}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Không thể lấy dữ liệu thống kê.");
+      }
+
+      const data = await response.json();
+      setStatistics(data);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
+  };
 
   const loadMembers = async () => {
     try {
@@ -104,9 +123,7 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.detail || "Không thể thêm thành viên."
-        );
+        throw new Error(data.detail || "Không thể thêm thành viên.");
       }
 
       alert("Thêm thành viên thành công.");
@@ -128,12 +145,20 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
     }
   };
 
+  const getMemberInitials = (name = "") => {
+    const words = name.trim().split(/\s+/).filter(Boolean);
+
+    if (words.length === 0) return "?";
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+
+    return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
+  };
+
   const renderSidebar = () => (
     <aside className="dashboard-sidebar">
       <div className="sidebar-logo">
-        MEDICATION
-        <br />
-        MANAGER
+        <span>MEDICATION</span>
+        <span>MANAGER</span>
       </div>
 
       <nav>
@@ -141,7 +166,7 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
           className="sidebar-item active"
           type="button"
         >
-          Dashboard
+          <span className="sidebar-item-label">Dashboard</span>
         </button>
 
         <button
@@ -149,7 +174,7 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
           type="button"
           onClick={() => setShowMemberForm(false)}
         >
-          Thành viên
+          <span className="sidebar-item-label">Thành viên</span>
         </button>
 
         <button
@@ -157,7 +182,7 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
           type="button"
           onClick={onOpenJournal}
         >
-          Nhật ký
+          <span className="sidebar-item-label">Nhật ký</span>
         </button>
 
         <button
@@ -165,11 +190,11 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
           type="button"
           onClick={onOpenStatistics}
         >
-          Thống kê
+          <span className="sidebar-item-label">Thống kê</span>
         </button>
 
         <button className="sidebar-item" type="button">
-          Cài đặt
+          <span className="sidebar-item-label">Cài đặt</span>
         </button>
 
         <button
@@ -185,12 +210,11 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
 
   const renderHeader = () => (
     <header className="dashboard-header">
-      <div className="header-title">
-        MEDICATION MANAGER
-      </div>
+      <div className="header-title">MEDICATION MANAGER</div>
 
       <div className="header-user">
-        Xin chào, Admin
+        <span className="header-user-dot" />
+        <span>Xin chào, Admin</span>
       </div>
     </header>
   );
@@ -199,12 +223,16 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
-          <h2>THÊM THÀNH VIÊN</h2>
+          <div>
+            <span className="modal-eyebrow">QUẢN LÝ GIA ĐÌNH</span>
+            <h2>THÊM THÀNH VIÊN</h2>
+          </div>
 
           <button
             type="button"
             className="modal-close"
             onClick={() => setShowMemberForm(false)}
+            aria-label="Đóng"
           >
             ×
           </button>
@@ -297,36 +325,58 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
     return (
       <>
         <section className="overview-section">
-          <h1>TỔNG QUAN</h1>
+          <div className="section-title-row">
+            <div>
+              <span className="section-eyebrow">DASHBOARD</span>
+              <h1>TỔNG QUAN</h1>
+            </div>
+            <span className="section-date">Tình trạng gia đình</span>
+          </div>
 
           <div className="overview-cards">
-            <div className="overview-card">
-              <span className="overview-number">
-                {members.length}
-              </span>
+            <div className="overview-card overview-card-members">
+              <div className="overview-card-top">
+                <span className="overview-icon">01</span>
+                <span className="overview-trend">Hồ sơ</span>
+              </div>
 
-              <span className="overview-label">
-                Thành viên
-              </span>
-            </div>
+              <span className="overview-number">{members.length}</span>
 
-            <div className="overview-card">
-              <span className="overview-number">
-                —
-              </span>
-
-              <span className="overview-label">
-                Lịch hôm nay
+              <span className="overview-label">THÀNH VIÊN</span>
+              <span className="overview-description">
+                Tổng số thành viên trong gia đình
               </span>
             </div>
 
-            <div className="overview-card">
+            <div className="overview-card overview-card-schedules">
+              <div className="overview-card-top">
+                <span className="overview-icon">02</span>
+                <span className="overview-trend">Lịch</span>
+              </div>
+
               <span className="overview-number">
-                —
+                {statistics?.overview?.total_schedules ?? 0}
               </span>
 
-              <span className="overview-label">
-                Tuân thủ
+              <span className="overview-label">TỔNG LỊCH UỐNG</span>
+              <span className="overview-description">
+                Lịch dùng thuốc đang được quản lý
+              </span>
+            </div>
+
+            <div className="overview-card overview-card-compliance">
+              <div className="overview-card-top">
+                <span className="overview-icon">03</span>
+                <span className="overview-trend">Theo dõi</span>
+              </div>
+
+              <span className="overview-number">
+                {statistics?.overview?.overall_compliance ?? 0}%
+              </span>
+
+              <span className="overview-label">TUÂN THỦ</span>
+              <span className="overview-description">
+                Mức độ hoàn thành lịch uống thuốc
               </span>
             </div>
           </div>
@@ -334,10 +384,13 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
 
         <section className="members-section">
           <div className="section-header">
-            <h2>THÀNH VIÊN GIA ĐÌNH</h2>
+            <div>
+              <span className="section-eyebrow">FAMILY</span>
+              <h2>THÀNH VIÊN GIA ĐÌNH</h2>
+            </div>
 
             <button
-              className="primary-button"
+              className="primary-button add-member-button"
               type="button"
               onClick={() => setShowMemberForm(true)}
             >
@@ -346,7 +399,11 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
           </div>
 
           {members.length === 0 ? (
-            <p>Chưa có thành viên.</p>
+            <div className="empty-state">
+              <div className="empty-state-icon">+</div>
+              <h3>Chưa có thành viên</h3>
+              <p>Thêm thành viên để bắt đầu quản lý lịch dùng thuốc.</p>
+            </div>
           ) : (
             <div className="member-list">
               {members.map((member) => (
@@ -354,6 +411,10 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
                   className="member-card"
                   key={member.id}
                 >
+                  <div className="member-avatar">
+                    {getMemberInitials(member.full_name)}
+                  </div>
+
                   <div className="member-info">
                     <h3>{member.full_name}</h3>
 

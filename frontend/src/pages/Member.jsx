@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../styles/Dashboard.css";
+import "../styles/Member.css";
 
 const API_BASE_URL = "http://127.0.0.1:8000";
 
@@ -828,6 +828,7 @@ function Member({ member, onBack }) {
 
   const renderMemberDetail = () => (
     <>
+     <div className="member-page">
       <div className="member-detail-header">
         <button
           type="button"
@@ -1062,6 +1063,7 @@ function Member({ member, onBack }) {
             renderScheduleForm()}
         </div>
       </section>
+      </div>
     </>
   );
 
