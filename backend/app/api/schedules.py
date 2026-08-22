@@ -94,11 +94,19 @@ def api_confirm_taken(
     log_id: int,
     db: Session = Depends(get_db)
 ):
-    return ScheduleService.confirm_taken_log(
+    return ScheduleService.take_log(
         db,
         log_id
     )
-
+@router.post("/logs/{log_id}/skip")
+def api_skip_log(
+    log_id: int,
+    db: Session = Depends(get_db)
+):
+    return ScheduleService.skip_log(
+        db,
+        log_id
+    )
 
 @router.get("/compliance/{member_id}")
 def api_get_compliance(

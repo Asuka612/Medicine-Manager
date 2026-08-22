@@ -2,7 +2,7 @@ from datetime import date, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
+from app.services.log_service import LogService
 from app.database import get_db
 from app.models.member import FamilyMember
 from app.models.schedule import Schedule
@@ -55,11 +55,19 @@ def get_member_dashboard(
         )
         .all()
     )
+    for schedule in schedules:
+        LogService.ensure_logs_for_week(
+            db=db,
+            schedule=schedule,
+            week_start=week_start,
+            week_end=week_end
+        )
 
-    # ==========================================
+        LogService.mark_missed_logs(
+            db=db,
+            schedule=schedule
+        )
     # 4. Lấy medications
-    # ==========================================
-
     medication_ids = [
         schedule.medication_id
         for schedule in schedules
