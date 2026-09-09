@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/Member.css";
-
-const API_BASE_URL = "http://127.0.0.1:8000";
-
+import { apiFetch } from "../utils/api";
 function Member({ member, onBack }) {
-  const adminId = localStorage.getItem("admin_id");
-
   const [selectedMember, setSelectedMember] = useState(member);
 
   const [medications, setMedications] = useState([]);
@@ -44,13 +40,13 @@ function Member({ member, onBack }) {
     localStorage.removeItem("adminId");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-
+    localStorage.removeItem("access_token");
     window.location.href = "/login";
   };
 
   useEffect(() => {
-    if (!adminId) {
-      setError("Không tìm thấy admin_id. Vui lòng đăng nhập lại.");
+    if (!localStorage.getItem("access_token")) {
+      setError("Không tìm thấy phiên đăng nhập. Vui lòng đăng nhập lại.");
       setLoading(false);
       return;
     }
@@ -71,17 +67,17 @@ function Member({ member, onBack }) {
         scheduleResponse,
         complianceResponse,
       ] = await Promise.all([
-        fetch(
-          `${API_BASE_URL}/api/members/${memberId}?admin_id=${adminId}`
+        apiFetch(
+          `/api/members/${memberId}`
         ),
-        fetch(
-          `${API_BASE_URL}/api/medications/member/${memberId}?admin_id=${adminId}`
+        apiFetch(
+          `/api/medications/member/${memberId}`
         ),
-        fetch(
-          `${API_BASE_URL}/api/schedules/member/${memberId}?admin_id=${adminId}`
+        apiFetch(
+          `/api/schedules/member/${memberId}`
         ),
-        fetch(
-          `${API_BASE_URL}/api/schedules/compliance/${memberId}`
+        apiFetch(
+          `/api/schedules/compliance/${memberId}`
         ),
       ]);
 
@@ -140,8 +136,8 @@ function Member({ member, onBack }) {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/members/${member.id}?admin_id=${adminId}`,
+      const response = await apiFetch(
+        `/api/members/${member.id}`,
         {
           method: "DELETE",
         }
@@ -198,8 +194,8 @@ function Member({ member, onBack }) {
           medicationForm.expiry_date || null,
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/medications/?admin_id=${adminId}`,
+      const response = await apiFetch(
+        "/api/medications/",
         {
           method: "POST",
           headers: {
@@ -247,12 +243,12 @@ function Member({ member, onBack }) {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/medications/${medicationId}?admin_id=${adminId}`,
-        {
-          method: "DELETE",
-        }
-      );
+     const response = await apiFetch(
+    `/api/medications/${medicationId}`,
+    {
+        method: "DELETE",
+    }
+);
 
       const data = await response.json();
 
@@ -385,16 +381,16 @@ function Member({ member, onBack }) {
           scheduleForm.notification_message,
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/schedules/?admin_id=${adminId}`,
-        {
-          method: "POST",
-          headers: {
+   const response = await apiFetch(
+    "/api/schedules/",
+    {
+        method: "POST",
+        headers: {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+        },
+        body: JSON.stringify(payload),
+    }
+);
 
       const data = await response.json();
 
@@ -442,13 +438,12 @@ function Member({ member, onBack }) {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/schedules/${scheduleId}?admin_id=${adminId}`,
-        {
-          method: "DELETE",
-        }
-      );
-
+      const response = await apiFetch(
+    `/api/schedules/${scheduleId}`,
+    {
+        method: "DELETE",
+    }
+);
       const data = await response.json();
 
       if (!response.ok) {
@@ -729,17 +724,17 @@ function Member({ member, onBack }) {
                     {scheduleForm
                       .reminder_times.length >
                       1 && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          removeReminderTime(
-                            index
-                          )
-                        }
-                      >
-                        ×
-                      </button>
-                    )}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            removeReminderTime(
+                              index
+                            )
+                          }
+                        >
+                          ×
+                        </button>
+                      )}
                   </div>
                 )
               )}
@@ -828,241 +823,241 @@ function Member({ member, onBack }) {
 
   const renderMemberDetail = () => (
     <>
-     <div className="member-page">
-      <div className="member-detail-header">
-        <button
-          type="button"
-          className="back-button"
-          onClick={onBack}
-        >
-          ← Thành viên:{" "}
-          {selectedMember?.full_name || member.full_name}
-        </button>
-      </div>
-
-      <section className="member-detail">
-        <div className="member-profile">
-          <h2>THÔNG TIN</h2>
-
-          <p>
-            <strong>Họ tên:</strong>{" "}
-            {selectedMember?.full_name}
-          </p>
-
-          <p>
-            <strong>Quan hệ:</strong>{" "}
-            {selectedMember?.relationship || "Không có"}
-          </p>
-
-          <p>
-            <strong>Bệnh sử:</strong>{" "}
-            {selectedMember
-              ?.medical_history_encrypted ||
-              "Không có"}
-          </p>
-
-          <p>
-            <strong>Tuân thủ:</strong>{" "}
-            {compliance}%
-          </p>
-
+      <div className="member-page">
+        <div className="member-detail-header">
           <button
             type="button"
-            className="delete-button"
-            onClick={handleDeleteMember}
+            className="back-button"
+            onClick={onBack}
           >
-            Xóa thành viên
+            ← Thành viên:{" "}
+            {selectedMember?.full_name || member.full_name}
           </button>
         </div>
 
-        <div className="medication-section">
-          <div className="section-header">
-            <h2>THUỐC</h2>
+        <section className="member-detail">
+          <div className="member-profile">
+            <h2>THÔNG TIN</h2>
+
+            <p>
+              <strong>Họ tên:</strong>{" "}
+              {selectedMember?.full_name}
+            </p>
+
+            <p>
+              <strong>Quan hệ:</strong>{" "}
+              {selectedMember?.relationship || "Không có"}
+            </p>
+
+            <p>
+              <strong>Bệnh sử:</strong>{" "}
+              {selectedMember
+                ?.medical_history_encrypted ||
+                "Không có"}
+            </p>
+
+            <p>
+              <strong>Tuân thủ:</strong>{" "}
+              {compliance}%
+            </p>
 
             <button
               type="button"
-              className="primary-button"
-              onClick={() => {
-                setMedicationForm({
-                  family_member_id: member.id,
-                  name: "",
-                  dosage: "",
-                  stock_quantity: 0,
-                  min_threshold: 5,
-                  expiry_date: "",
-                });
-
-                setShowMedicationForm(true);
-              }}
+              className="delete-button"
+              onClick={handleDeleteMember}
             >
-              + Thêm thuốc
+              Xóa thành viên
             </button>
           </div>
 
-          {medications.length === 0 ? (
-            <p>Chưa có thuốc.</p>
-          ) : (
-            <div className="medication-list">
-              {medications.map(
-                (medication) => (
-                  <div
-                    className="medication-card"
-                    key={medication.id}
-                  >
-                    <h3>
-                      {medication.name}
-                    </h3>
+          <div className="medication-section">
+            <div className="section-header">
+              <h2>THUỐC</h2>
 
-                    <p>
-                      Liều lượng:{" "}
-                      {medication.dosage || "Không có"}
-                    </p>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={() => {
+                  setMedicationForm({
+                    family_member_id: member.id,
+                    name: "",
+                    dosage: "",
+                    stock_quantity: 0,
+                    min_threshold: 5,
+                    expiry_date: "",
+                  });
 
-                    <p>
-                      Tồn kho:{" "}
-                      <strong>
-                        {medication.stock_quantity}
-                      </strong>
-                    </p>
-
-                    <p>
-                      Hạn sử dụng:{" "}
-                      {medication.expiry_date ||
-                        "Không có"}
-                    </p>
-
-                    <button
-                      type="button"
-                      className="delete-button"
-                      onClick={() =>
-                        handleDeleteMedication(
-                          medication.id
-                        )
-                      }
-                    >
-                      Xóa thuốc
-                    </button>
-                  </div>
-                )
-              )}
+                  setShowMedicationForm(true);
+                }}
+              >
+                + Thêm thuốc
+              </button>
             </div>
-          )}
 
-          {showMedicationForm &&
-            renderMedicationForm()}
-        </div>
-
-        <div className="schedule-section">
-          <div className="section-header">
-            <h2>LỊCH UỐNG</h2>
-
-            <button
-              type="button"
-              className="primary-button"
-              onClick={openScheduleForm}
-            >
-              + Tạo lịch
-            </button>
-          </div>
-
-          {schedules.length === 0 ? (
-            <p>Chưa có lịch uống thuốc.</p>
-          ) : (
-            <div className="schedule-list">
-              {schedules.map(
-                (schedule) => {
-                  const medication =
-                    medications.find(
-                      (item) =>
-                        Number(item.id) ===
-                        Number(
-                          schedule.medication_id
-                        )
-                    );
-
-                  return (
+            {medications.length === 0 ? (
+              <p>Chưa có thuốc.</p>
+            ) : (
+              <div className="medication-list">
+                {medications.map(
+                  (medication) => (
                     <div
-                      className="schedule-card"
-                      key={schedule.id}
+                      className="medication-card"
+                      key={medication.id}
                     >
                       <h3>
-                        {medication?.name ||
-                          "Không tìm thấy thuốc"}
+                        {medication.name}
                       </h3>
 
                       <p>
                         Liều lượng:{" "}
-                        {medication?.dosage ||
+                        {medication.dosage || "Không có"}
+                      </p>
+
+                      <p>
+                        Tồn kho:{" "}
+                        <strong>
+                          {medication.stock_quantity}
+                        </strong>
+                      </p>
+
+                      <p>
+                        Hạn sử dụng:{" "}
+                        {medication.expiry_date ||
                           "Không có"}
-                      </p>
-
-                      <p>
-                        Thời gian:{" "}
-                        {Array.isArray(
-                          schedule.reminder_times
-                        )
-                          ? schedule.reminder_times.join(
-                              ", "
-                            )
-                          : ""}
-                      </p>
-
-                      <p>
-                        Chu kỳ:{" "}
-                        {schedule.frequency_days ===
-                        1
-                          ? "Mỗi ngày"
-                          : `Mỗi ${schedule.frequency_days} ngày`}
-                      </p>
-
-                      <p>
-                        Từ:{" "}
-                        {schedule.start_date}
-                      </p>
-
-                      <p>
-                        Đến:{" "}
-                        {schedule.end_date ||
-                          "Không giới hạn"}
-                      </p>
-
-                      <p>
-                        Nhắc trước:{" "}
-                        {
-                          schedule.reminder_before_minutes
-                        }{" "}
-                        phút
-                      </p>
-
-                      <p>
-                        Thông báo:{" "}
-                        {
-                          schedule.notification_message
-                        }
                       </p>
 
                       <button
                         type="button"
                         className="delete-button"
                         onClick={() =>
-                          handleDeleteSchedule(
-                            schedule.id
+                          handleDeleteMedication(
+                            medication.id
                           )
                         }
                       >
-                        Xóa lịch
+                        Xóa thuốc
                       </button>
                     </div>
-                  );
-                }
-              )}
-            </div>
-          )}
+                  )
+                )}
+              </div>
+            )}
 
-          {showScheduleForm &&
-            renderScheduleForm()}
-        </div>
-      </section>
+            {showMedicationForm &&
+              renderMedicationForm()}
+          </div>
+
+          <div className="schedule-section">
+            <div className="section-header">
+              <h2>LỊCH UỐNG</h2>
+
+              <button
+                type="button"
+                className="primary-button"
+                onClick={openScheduleForm}
+              >
+                + Tạo lịch
+              </button>
+            </div>
+
+            {schedules.length === 0 ? (
+              <p>Chưa có lịch uống thuốc.</p>
+            ) : (
+              <div className="schedule-list">
+                {schedules.map(
+                  (schedule) => {
+                    const medication =
+                      medications.find(
+                        (item) =>
+                          Number(item.id) ===
+                          Number(
+                            schedule.medication_id
+                          )
+                      );
+
+                    return (
+                      <div
+                        className="schedule-card"
+                        key={schedule.id}
+                      >
+                        <h3>
+                          {medication?.name ||
+                            "Không tìm thấy thuốc"}
+                        </h3>
+
+                        <p>
+                          Liều lượng:{" "}
+                          {medication?.dosage ||
+                            "Không có"}
+                        </p>
+
+                        <p>
+                          Thời gian:{" "}
+                          {Array.isArray(
+                            schedule.reminder_times
+                          )
+                            ? schedule.reminder_times.join(
+                              ", "
+                            )
+                            : ""}
+                        </p>
+
+                        <p>
+                          Chu kỳ:{" "}
+                          {schedule.frequency_days ===
+                            1
+                            ? "Mỗi ngày"
+                            : `Mỗi ${schedule.frequency_days} ngày`}
+                        </p>
+
+                        <p>
+                          Từ:{" "}
+                          {schedule.start_date}
+                        </p>
+
+                        <p>
+                          Đến:{" "}
+                          {schedule.end_date ||
+                            "Không giới hạn"}
+                        </p>
+
+                        <p>
+                          Nhắc trước:{" "}
+                          {
+                            schedule.reminder_before_minutes
+                          }{" "}
+                          phút
+                        </p>
+
+                        <p>
+                          Thông báo:{" "}
+                          {
+                            schedule.notification_message
+                          }
+                        </p>
+
+                        <button
+                          type="button"
+                          className="delete-button"
+                          onClick={() =>
+                            handleDeleteSchedule(
+                              schedule.id
+                            )
+                          }
+                        >
+                          Xóa lịch
+                        </button>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            )}
+
+            {showScheduleForm &&
+              renderScheduleForm()}
+          </div>
+        </section>
       </div>
     </>
   );

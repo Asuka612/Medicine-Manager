@@ -1,47 +1,49 @@
 import { useEffect, useState } from "react";
 import "../styles/Static.css";
-
-const API_BASE_URL = "http://127.0.0.1:8000";
-
-function Static({ onBack }) {
-  const adminId = localStorage.getItem("admin_id");
-
+import { apiFetch } from "../utils/api";
+function Static({
+  onBack,
+  onOpenJournal,
+  onOpenStatistics
+}) {
   const [statistics, setStatistics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const loadStatistics = async () => {
     try {
-      setLoading(true);
-      setError("");
+        setLoading(true);
+        setError("");
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/statistics/?admin_id=${adminId}`
-      );
+        const response = await apiFetch(
+            "/api/statistics/"
+        );
 
-      if (!response.ok) {
-        throw new Error("Không thể lấy dữ liệu thống kê.");
-      }
+        if (!response.ok) {
+            throw new Error(
+                "Không thể lấy dữ liệu thống kê."
+            );
+        }
 
-      const data = await response.json();
-      setStatistics(data);
+        const data = await response.json();
+        setStatistics(data);
     } catch (err) {
-      console.error(err);
-      setError(err.message);
+        console.error(err);
+        setError(err.message);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
   useEffect(() => {
-    if (!adminId) {
-      setError("Không tìm thấy admin_id.");
-      setLoading(false);
-      return;
+    if (!localStorage.getItem("access_token")) {
+        setError("Không tìm thấy phiên đăng nhập.");
+        setLoading(false);
+        return;
     }
 
     loadStatistics();
-  }, []);
+}, []);
 
   if (loading) {
     return (
@@ -54,23 +56,61 @@ function Static({ onBack }) {
   return (
     <div className="dashboard-container">
       <aside className="dashboard-sidebar">
-        <div className="sidebar-logo">
-          MEDICATION
-          <br />
-          MANAGER
-        </div>
+  <div className="sidebar-logo">
+    MEDICATION
+    <br />
+    MANAGER
+  </div>
 
-        <nav>
-          <button
-            className="sidebar-item"
-            type="button"
-            onClick={onBack}
-          >
-            Quay lại
-          </button>
-         
-        </nav>
-      </aside>
+  <nav>
+    <button
+      className="sidebar-item"
+      type="button"
+      onClick={onBack}
+    >
+      Dashboard
+    </button>
+
+    <button
+      className="sidebar-item"
+      type="button"
+      onClick={onOpenJournal}
+    >
+      Nhật ký
+    </button>
+
+    <button
+      className="sidebar-item active"
+      type="button"
+      onClick={onOpenStatistics}
+    >
+      Thống kê
+    </button>
+
+    <button
+      className="sidebar-item"
+      type="button"
+    >
+      Cài đặt
+    </button>
+
+    <button
+      type="button"
+      className="logout-button"
+      onClick={() => {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("admin_id");
+        localStorage.removeItem("adminId");
+        localStorage.removeItem("token");
+
+        window.location.href = "/login";
+      }}
+    >
+      Đăng xuất
+    </button>
+  </nav>
+</aside>
 
       <main className="dashboard-main">
         <header className="dashboard-header">

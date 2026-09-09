@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import "../styles/Journal.css";
+import { apiFetch } from "../utils/api";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
-
-function Journal({ onBack }) {
-    const adminId = localStorage.getItem("admin_id");
-    const [logs, setLogs] = useState([]);
+function Journal({
+    onBack,
+    onOpenJournal,
+    onOpenStatistics
+}) {    const [logs, setLogs] = useState([]);
     const [members, setMembers] = useState([]);
     const [selectedMember, setSelectedMember] = useState("");
     const [selectedStatus, setSelectedStatus] = useState("");
@@ -14,9 +15,7 @@ function Journal({ onBack }) {
 
     const loadMembers = async () => {
         try {
-            const response = await fetch(
-                `${API_BASE_URL}/api/members/?admin_id=${adminId}`
-            );
+            const response = await apiFetch("/api/members/");
 
             if (!response.ok) {
                 throw new Error("Không thể lấy danh sách thành viên.");
@@ -34,13 +33,13 @@ function Journal({ onBack }) {
             setLoading(true);
             setError("");
 
-            let url = `${API_BASE_URL}/api/journal/?admin_id=${adminId}`;
+            let url = "/api/journal/";
 
             if (selectedMember) {
-                url += `&family_member_id=${selectedMember}`;
+                url += `?family_member_id=${selectedMember}`;
             }
 
-            const response = await fetch(url);
+            const response = await apiFetch(url);
 
             if (!response.ok) {
                 throw new Error("Không thể lấy nhật ký.");
@@ -57,8 +56,8 @@ function Journal({ onBack }) {
     };
 
     useEffect(() => {
-        if (!adminId) {
-            setError("Không tìm thấy admin_id.");
+        if (!localStorage.getItem("access_token")) {
+            setError("Không tìm thấy phiên đăng nhập.");
             setLoading(false);
             return;
         }
@@ -67,10 +66,10 @@ function Journal({ onBack }) {
     }, []);
 
     useEffect(() => {
-        if (adminId) {
-            loadJournal();
-        }
-    }, [selectedMember]);
+    if (localStorage.getItem("access_token")) {
+        loadJournal();
+    }
+}, [selectedMember]);
 
     const filteredLogs = logs.filter((log) => {
         if (!selectedStatus) {
@@ -98,24 +97,24 @@ function Journal({ onBack }) {
     };
 
     const getStatusText = (status) => {
-    if (status === "Taken") {
-        return "Đã uống";
-    }
+        if (status === "Taken") {
+            return "Đã uống";
+        }
 
-    if (status === "Pending") {
-        return "Chưa uống";
-    }
+        if (status === "Pending") {
+            return "Chưa uống";
+        }
 
-    if (status === "Missed") {
-        return "Quá giờ";
-    }
+        if (status === "Missed") {
+            return "Quá giờ";
+        }
 
-    if (status === "Skipped") {
-        return "Bỏ qua";
-    }
+        if (status === "Skipped") {
+            return "Bỏ qua";
+        }
 
-    return status || "Không xác định";
-};
+        return status || "Không xác định";
+    };
 
     if (loading) {
         return (
@@ -128,24 +127,61 @@ function Journal({ onBack }) {
     return (
         <div className="dashboard-container">
             <aside className="dashboard-sidebar">
-                <div className="sidebar-logo">
-                    MEDICATION
-                    <br />
-                    MANAGER
-                </div>
+    <div className="sidebar-logo">
+        MEDICATION
+        <br />
+        MANAGER
+    </div>
 
-                <nav>
-                    <button
-                        className="sidebar-item"
-                        type="button"
-                        onClick={onBack}
-                    >
-                        Quay Lại
-                    </button>
+    <nav>
+        <button
+            className="sidebar-item"
+            type="button"
+            onClick={onBack}
+        >
+            Dashboard
+        </button>
 
-                    
-                </nav>
-            </aside>
+        <button
+            className="sidebar-item active"
+            type="button"
+            onClick={onOpenJournal}
+        >
+            Nhật ký
+        </button>
+
+        <button
+            className="sidebar-item"
+            type="button"
+            onClick={onOpenStatistics}
+        >
+            Thống kê
+        </button>
+
+        <button
+            className="sidebar-item"
+            type="button"
+        >
+            Cài đặt
+        </button>
+
+        <button
+            type="button"
+            className="logout-button"
+            onClick={() => {
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("user");
+                localStorage.removeItem("admin_id");
+                localStorage.removeItem("adminId");
+                localStorage.removeItem("token");
+
+                window.location.href = "/login";
+            }}
+        >
+            Đăng xuất
+        </button>
+    </nav>
+</aside>
 
             <main className="dashboard-main">
                 <header className="dashboard-header">

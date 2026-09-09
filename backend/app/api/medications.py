@@ -4,6 +4,9 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas.medication import MedicationCreate, MedicationUpdate
 from app.services.medication_service import MedicationService
+from app.models.user import User
+from app.core.dependencies import get_current_user
+
 
 router = APIRouter(
     prefix="/api/medications",
@@ -14,9 +17,11 @@ router = APIRouter(
 @router.post("/")
 def create_medication(
     data: MedicationCreate,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     medication = MedicationService.create_medication(
         db=db,
         admin_id=admin_id,
@@ -40,9 +45,11 @@ def create_medication(
 @router.get("/member/{family_member_id}")
 def get_medications(
     family_member_id: int,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     medications = MedicationService.get_medications(
         db=db,
         admin_id=admin_id,
@@ -55,9 +62,11 @@ def get_medications(
 @router.get("/{medication_id}")
 def get_medication(
     medication_id: int,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     medication = MedicationService.get_medication(
         db=db,
         admin_id=admin_id,
@@ -71,9 +80,11 @@ def get_medication(
 def update_medication(
     medication_id: int,
     data: MedicationUpdate,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     medication = MedicationService.update_medication(
         db=db,
         admin_id=admin_id,
@@ -98,9 +109,11 @@ def update_medication(
 @router.delete("/{medication_id}")
 def delete_medication(
     medication_id: int,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     return MedicationService.delete_medication(
         db=db,
         admin_id=admin_id,

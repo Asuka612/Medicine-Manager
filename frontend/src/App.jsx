@@ -4,13 +4,17 @@ import Dashboard from "./pages/Dashboard";
 import MemberDashboard from "./pages/MemberDashboard";
 import Member from "./pages/Member";
 import Journal from "./pages/Journal";
-import "./App.css";
 import Static from "./pages/Static";
+import "./App.css";
+
+
 export default function App() {
   const [user, setUser] = useState(null);
   const [selectedMember, setSelectedMember] = useState(null);
   const [showJournal, setShowJournal] = useState(false);
   const [showStatistics, setShowStatistics] = useState(false);
+
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
 
@@ -18,6 +22,8 @@ export default function App() {
       setUser(JSON.parse(savedUser));
     }
   }, []);
+
+
   // CHƯA ĐĂNG NHẬP
   if (!user) {
     return (
@@ -26,6 +32,8 @@ export default function App() {
       </div>
     );
   }
+
+
   // MEMBER ACCOUNT
   if (user.role === "MEMBER") {
     return (
@@ -34,23 +42,46 @@ export default function App() {
       </div>
     );
   }
-  // ADMIN
 
+
+  // ADMIN
   return (
     <div className="app-container">
 
       {showStatistics ? (
         <Static
-          onBack={() => setShowStatistics(false)}
+          onBack={() => {
+            setShowStatistics(false);
+          }}
+          onOpenJournal={() => {
+            setShowStatistics(false);
+            setShowJournal(true);
+          }}
+          onOpenStatistics={() => {
+            setShowStatistics(true);
+            setShowJournal(false);
+          }}
         />
       ) : showJournal ? (
         <Journal
-          onBack={() => setShowJournal(false)}
+          onBack={() => {
+            setShowJournal(false);
+          }}
+          onOpenJournal={() => {
+            setShowJournal(true);
+            setShowStatistics(false);
+          }}
+          onOpenStatistics={() => {
+            setShowJournal(false);
+            setShowStatistics(true);
+          }}
         />
       ) : selectedMember ? (
         <Member
           member={selectedMember}
-          onBack={() => setSelectedMember(null)}
+          onBack={() => {
+            setSelectedMember(null);
+          }}
         />
       ) : (
         <Dashboard

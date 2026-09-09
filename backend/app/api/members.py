@@ -8,6 +8,9 @@ from app.schemas.member import (
 )
 from app.services.member_service import MemberService
 from app.models.user import User
+from app.core.dependencies import get_current_user
+
+
 router = APIRouter(
     prefix="/api/members",
     tags=["Family Members"]
@@ -17,9 +20,11 @@ router = APIRouter(
 @router.post("/")
 def create_member(
     data: MemberCreate,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     member, user = MemberService.create_member(
         db,
         admin_id,
@@ -34,7 +39,8 @@ def create_member(
             "admin_id": member.admin_id,
             "full_name": member.full_name,
             "relationship": member.relationship,
-            "medical_history_encrypted": member.medical_history_encrypted
+            "medical_history_encrypted":
+                member.medical_history_encrypted
         },
         "user": {
             "id": user.id,
@@ -47,9 +53,11 @@ def create_member(
 
 @router.get("/")
 def get_members(
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     members = MemberService.get_members(
         db,
         admin_id
@@ -81,9 +89,11 @@ def get_members(
 @router.get("/{family_member_id}")
 def get_member(
     family_member_id: int,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     member = MemberService.get_member(
         db,
         admin_id,
@@ -112,9 +122,11 @@ def get_member(
 def update_member(
     family_member_id: int,
     data: MemberUpdate,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     member = MemberService.update_member(
         db,
         admin_id,
@@ -139,9 +151,11 @@ def update_member(
 @router.delete("/{family_member_id}")
 def delete_member(
     family_member_id: int,
-    admin_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    admin_id = current_user.id
+
     return MemberService.delete_member(
         db,
         admin_id,

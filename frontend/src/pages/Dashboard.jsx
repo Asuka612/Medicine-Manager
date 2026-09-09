@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import "../styles/Dashboard.css";
+import { apiFetch } from "../utils/api";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
-
-function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
-  const adminId = localStorage.getItem("admin_id");
-
+function Dashboard({
+  onOpenMember,
+  onOpenJournal,
+  onOpenStatistics
+}) {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -25,13 +26,16 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
     localStorage.removeItem("adminId");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
 
     window.location.href = "/login";
   };
 
   useEffect(() => {
-    if (!adminId) {
-      setError("Không tìm thấy admin_id. Vui lòng đăng nhập lại.");
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      setError("Không tìm thấy phiên đăng nhập. Vui lòng đăng nhập lại.");
       setLoading(false);
       return;
     }
@@ -42,12 +46,14 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
 
   const loadStatistics = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/statistics/?admin_id=${adminId}`
+      const response = await apiFetch(
+        "/api/statistics/"
       );
 
       if (!response.ok) {
-        throw new Error("Không thể lấy dữ liệu thống kê.");
+        throw new Error(
+          "Không thể lấy dữ liệu thống kê."
+        );
       }
 
       const data = await response.json();
@@ -63,12 +69,14 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
       setLoading(true);
       setError("");
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/members/?admin_id=${adminId}`
+      const response = await apiFetch(
+        "/api/members/"
       );
 
       if (!response.ok) {
-        throw new Error("Không thể lấy danh sách thành viên.");
+        throw new Error(
+          "Không thể lấy danh sách thành viên."
+        );
       }
 
       const data = await response.json();
@@ -109,8 +117,8 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
     }
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/members/?admin_id=${adminId}`,
+      const response = await apiFetch(
+        "/api/members/",
         {
           method: "POST",
           headers: {
@@ -123,7 +131,10 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || "Không thể thêm thành viên.");
+        throw new Error(
+          data.detail ||
+          "Không thể thêm thành viên."
+        );
       }
 
       alert("Thêm thành viên thành công.");
@@ -146,12 +157,23 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
   };
 
   const getMemberInitials = (name = "") => {
-    const words = name.trim().split(/\s+/).filter(Boolean);
+    const words = name
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
 
-    if (words.length === 0) return "?";
-    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+    if (words.length === 0) {
+      return "?";
+    }
 
-    return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
+    if (words.length === 1) {
+      return words[0]
+        .slice(0, 2)
+        .toUpperCase();
+    }
+
+    return `${words[0][0]}${words[words.length - 1][0]}`
+      .toUpperCase();
   };
 
   const renderSidebar = () => (
@@ -166,17 +188,19 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
           className="sidebar-item active"
           type="button"
         >
-          <span className="sidebar-item-label">Dashboard</span>
+          <span className="sidebar-item-label">
+            Dashboard
+          </span>
         </button>
-
-        
 
         <button
           className="sidebar-item"
           type="button"
           onClick={onOpenJournal}
         >
-          <span className="sidebar-item-label">Nhật ký</span>
+          <span className="sidebar-item-label">
+            Nhật ký
+          </span>
         </button>
 
         <button
@@ -184,11 +208,18 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
           type="button"
           onClick={onOpenStatistics}
         >
-          <span className="sidebar-item-label">Thống kê</span>
+          <span className="sidebar-item-label">
+            Thống kê
+          </span>
         </button>
 
-        <button className="sidebar-item" type="button">
-          <span className="sidebar-item-label">Cài đặt</span>
+        <button
+          className="sidebar-item"
+          type="button"
+        >
+          <span className="sidebar-item-label">
+            Cài đặt
+          </span>
         </button>
 
         <button
@@ -204,7 +235,9 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
 
   const renderHeader = () => (
     <header className="dashboard-header">
-      <div className="header-title">MEDICATION MANAGER</div>
+      <div className="header-title">
+        MEDICATION MANAGER
+      </div>
 
       <div className="header-user">
         <span className="header-user-dot" />
@@ -218,14 +251,19 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
       <div className="modal">
         <div className="modal-header">
           <div>
-            <span className="modal-eyebrow">QUẢN LÝ GIA ĐÌNH</span>
+            <span className="modal-eyebrow">
+              QUẢN LÝ GIA ĐÌNH
+            </span>
+
             <h2>THÊM THÀNH VIÊN</h2>
           </div>
 
           <button
             type="button"
             className="modal-close"
-            onClick={() => setShowMemberForm(false)}
+            onClick={() =>
+              setShowMemberForm(false)
+            }
             aria-label="Đóng"
           >
             ×
@@ -287,7 +325,9 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
 
               <textarea
                 name="medical_history_encrypted"
-                value={memberForm.medical_history_encrypted}
+                value={
+                  memberForm.medical_history_encrypted
+                }
                 onChange={handleMemberInput}
                 placeholder="Nhập bệnh sử..."
               />
@@ -297,7 +337,9 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
               <button
                 type="button"
                 className="secondary-button"
-                onClick={() => setShowMemberForm(false)}
+                onClick={() =>
+                  setShowMemberForm(false)
+                }
               >
                 Hủy
               </button>
@@ -321,22 +363,38 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
         <section className="overview-section">
           <div className="section-title-row">
             <div>
-              <span className="section-eyebrow">DASHBOARD</span>
+              <span className="section-eyebrow">
+                DASHBOARD
+              </span>
+
               <h1>TỔNG QUAN</h1>
             </div>
-            <span className="section-date">Tình trạng gia đình</span>
+
+            <span className="section-date">
+              Tình trạng gia đình
+            </span>
           </div>
 
           <div className="overview-cards">
             <div className="overview-card overview-card-members">
               <div className="overview-card-top">
-                <span className="overview-icon">01</span>
-                <span className="overview-trend">Hồ sơ</span>
+                <span className="overview-icon">
+                  01
+                </span>
+
+                <span className="overview-trend">
+                  Hồ sơ
+                </span>
               </div>
 
-              <span className="overview-number">{members.length}</span>
+              <span className="overview-number">
+                {members.length}
+              </span>
 
-              <span className="overview-label">THÀNH VIÊN</span>
+              <span className="overview-label">
+                THÀNH VIÊN
+              </span>
+
               <span className="overview-description">
                 Tổng số thành viên trong gia đình
               </span>
@@ -344,15 +402,23 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
 
             <div className="overview-card overview-card-schedules">
               <div className="overview-card-top">
-                <span className="overview-icon">02</span>
-                <span className="overview-trend">Lịch</span>
+                <span className="overview-icon">
+                  02
+                </span>
+
+                <span className="overview-trend">
+                  Lịch
+                </span>
               </div>
 
               <span className="overview-number">
                 {statistics?.overview?.total_schedules ?? 0}
               </span>
 
-              <span className="overview-label">TỔNG LỊCH UỐNG</span>
+              <span className="overview-label">
+                TỔNG LỊCH UỐNG
+              </span>
+
               <span className="overview-description">
                 Lịch dùng thuốc đang được quản lý
               </span>
@@ -360,15 +426,23 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
 
             <div className="overview-card overview-card-compliance">
               <div className="overview-card-top">
-                <span className="overview-icon">03</span>
-                <span className="overview-trend">Theo dõi</span>
+                <span className="overview-icon">
+                  03
+                </span>
+
+                <span className="overview-trend">
+                  Theo dõi
+                </span>
               </div>
 
               <span className="overview-number">
                 {statistics?.overview?.overall_compliance ?? 0}%
               </span>
 
-              <span className="overview-label">TUÂN THỦ</span>
+              <span className="overview-label">
+                TUÂN THỦ
+              </span>
+
               <span className="overview-description">
                 Mức độ hoàn thành lịch uống thuốc
               </span>
@@ -379,14 +453,19 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
         <section className="members-section">
           <div className="section-header">
             <div>
-              <span className="section-eyebrow">FAMILY</span>
+              <span className="section-eyebrow">
+                FAMILY
+              </span>
+
               <h2>THÀNH VIÊN GIA ĐÌNH</h2>
             </div>
 
             <button
               className="primary-button add-member-button"
               type="button"
-              onClick={() => setShowMemberForm(true)}
+              onClick={() =>
+                setShowMemberForm(true)
+              }
             >
               + Thêm thành viên
             </button>
@@ -394,9 +473,16 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
 
           {members.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-state-icon">+</div>
+              <div className="empty-state-icon">
+                +
+              </div>
+
               <h3>Chưa có thành viên</h3>
-              <p>Thêm thành viên để bắt đầu quản lý lịch dùng thuốc.</p>
+
+              <p>
+                Thêm thành viên để bắt đầu quản lý
+                lịch dùng thuốc.
+              </p>
             </div>
           ) : (
             <div className="member-list">
@@ -406,21 +492,26 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
                   key={member.id}
                 >
                   <div className="member-avatar">
-                    {getMemberInitials(member.full_name)}
+                    {getMemberInitials(
+                      member.full_name
+                    )}
                   </div>
 
                   <div className="member-info">
                     <h3>{member.full_name}</h3>
 
                     <p>
-                      {member.relationship || "Chưa cập nhật"}
+                      {member.relationship ||
+                        "Chưa cập nhật"}
                     </p>
                   </div>
 
                   <button
                     className="secondary-button"
                     type="button"
-                    onClick={() => onOpenMember(member)}
+                    onClick={() =>
+                      onOpenMember(member)
+                    }
                   >
                     Quản lý
                   </button>

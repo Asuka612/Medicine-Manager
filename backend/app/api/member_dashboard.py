@@ -2,12 +2,15 @@ from datetime import date, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from app.services.log_service import LogService
 from app.database import get_db
 from app.models.member import FamilyMember
 from app.models.schedule import Schedule
 from app.models.medication import Medication
 from app.models.log import Log
+from app.models.user import User
+from app.core.dependencies import get_current_user
 
 
 router = APIRouter(
@@ -15,15 +18,23 @@ router = APIRouter(
     tags=["Member Dashboard"]
 )
 
+
 @router.get("/user/{user_id}")
 def get_member_dashboard_by_user(
     user_id: int,
+    current_user: User = Depends(get_current_user),
     week_start: date | None = None,
     db: Session = Depends(get_db)
 ):
+    if user_id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Bạn không có quyền xem dashboard của tài khoản này."
+        )
+
     member = (
         db.query(FamilyMember)
-        .filter(FamilyMember.member_id == user_id)
+        .filter(FamilyMember.member_id == current_user.id)
         .first()
     )
 
@@ -36,11 +47,15 @@ def get_member_dashboard_by_user(
     return get_member_dashboard(
         family_member_id=member.id,
         week_start=week_start,
-        db=db
+        db=db,
+        current_user=current_user
     )
+
+
 @router.get("/{family_member_id}")
 def get_member_dashboard(
     family_member_id: int,
+    current_user: User = Depends(get_current_user),
     week_start: date | None = None,
     db: Session = Depends(get_db)
 ):
@@ -56,6 +71,16 @@ def get_member_dashboard(
             detail="Không tìm thấy thành viên."
         )
 
+    # Thành viên chỉ được xem dashboard của chính mình
+    if (
+        current_user.role == "MEMBER"
+        and member.member_id != current_user.id
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Bạn không có quyền xem dashboard của thành viên này."
+        )
+
     # ==========================================
     # 2. Xác định tuần
     # ==========================================
@@ -66,7 +91,9 @@ def get_member_dashboard(
 
     week_end = week_start + timedelta(days=6)
 
+    # ==========================================
     # 3. Lấy schedules
+    # ==========================================
 
     schedules = (
         db.query(Schedule)
@@ -75,6 +102,7 @@ def get_member_dashboard(
         )
         .all()
     )
+
     for schedule in schedules:
         LogService.ensure_logs_for_week(
             db=db,
@@ -87,7 +115,11 @@ def get_member_dashboard(
             db=db,
             schedule=schedule
         )
+
+    # ==========================================
     # 4. Lấy medications
+    # ==========================================
+
     medication_ids = [
         schedule.medication_id
         for schedule in schedules
@@ -110,7 +142,7 @@ def get_member_dashboard(
         }
 
     # ==========================================
-    # 5. Lấy logs có sẵn trong tuần
+    # 5. Lấy logs trong tuần
     # ==========================================
 
     logs = (
@@ -141,33 +173,25 @@ def get_member_dashboard(
 
         schedule_result.append({
             "id": schedule.id,
-
             "medication_id": schedule.medication_id,
-
             "medication_name": (
                 medication.name
                 if medication
                 else "Không xác định"
             ),
-
             "dosage": (
                 medication.dosage
                 if medication
                 else ""
             ),
-
             "frequency_days": schedule.frequency_days,
-
             "reminder_times": (
                 schedule.reminder_times
                 if schedule.reminder_times
                 else []
             ),
-
             "start_date": schedule.start_date,
-
             "end_date": schedule.end_date,
-
             "notification_message": (
                 schedule.notification_message
             )

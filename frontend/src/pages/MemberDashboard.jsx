@@ -6,8 +6,8 @@ import React, {
 } from "react";
 import "../styles/MemberDashboard.css";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
 
+import { apiFetch } from "../utils/api";
 
 
 function formatDate(dateString) {
@@ -107,8 +107,8 @@ export default function MemberDashboard() {
 
         setError("");
 
-        const response = await fetch(
-          `${API_BASE_URL}/api/member-dashboard/user/${userId}`
+        const response = await apiFetch(
+          `/api/member-dashboard/user/${userId}`
         );
 
         if (!response.ok) {
@@ -175,8 +175,8 @@ export default function MemberDashboard() {
     try {
       setProcessingLogId(logId);
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/schedules/logs/${logId}/${action}?family_member_id=${data.member.id}`,
+      const response = await apiFetch(
+        `/api/schedules/logs/${logId}/${action}?family_member_id=${data.member.id}`,
         {
           method: "POST",
         }
@@ -206,7 +206,7 @@ export default function MemberDashboard() {
     localStorage.removeItem("token");
     localStorage.removeItem("admin_id");
     localStorage.removeItem("adminId");
-
+    localStorage.removeItem("access_token");
     window.location.href = "/login";
   };
 
