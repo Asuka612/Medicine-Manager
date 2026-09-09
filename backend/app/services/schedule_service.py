@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from datetime import datetime
-
+from app.models.user import User
+from app.services.notification_service import NotificationService
 from app.models.log import Log
 from app.models.schedule import Schedule
 from app.models.medication import Medication
@@ -34,7 +35,6 @@ class ScheduleService:
             )
 
         return member
-
     @staticmethod
     def create_schedule(
         db: Session,
@@ -80,21 +80,63 @@ class ScheduleService:
                 detail="Ngày kết thúc không được trước ngày bắt đầu."
             )
 
-        schedule = ScheduleRepository.create_schedule(
-            db=db,
-            family_member_id=data.family_member_id,
-            medication_id=data.medication_id,
-            frequency_days=data.frequency_days,
-            reminder_times=data.reminder_times,
-            start_date=data.start_date,
-            weekdays=data.weekdays,
-            end_date=data.end_date,
-            notification_message=data.notification_message,
-            reminder_before_minutes=data.reminder_before_minutes
-        )
-        db.commit()
-        db.refresh(schedule)
-        return schedule
+        try:
+            schedule = ScheduleRepository.create_schedule(
+                db=db,
+                family_member_id=data.family_member_id,
+                medication_id=data.medication_id,
+                frequency_days=data.frequency_days,
+                reminder_times=data.reminder_times,
+                start_date=data.start_date,
+                weekdays=data.weekdays,
+                end_date=data.end_date,
+                notification_message=data.notification_message,
+                reminder_before_minutes=data.reminder_before_minutes
+            )
+
+            db.commit()
+            db.refresh(schedule)
+
+            member = (
+                db.query(FamilyMember)
+                .filter(
+                    FamilyMember.id == schedule.family_member_id
+                )
+                .first()
+            )
+
+            if member:
+                user = (
+                    db.query(User)
+                    .filter(
+                        User.id == member.member_id
+                    )
+                    .first()
+                )
+
+                if user:
+                    NotificationService.send_notification(
+                        receiver_email=user.email,
+                        subject="Lịch uống thuốc mới",
+                        message=(
+                            f"Bạn vừa được tạo lịch uống thuốc mới.\n\n"
+                            f"Thuốc: {medication.name}\n"
+                            f"Liều lượng: "
+                            f"{medication.dosage or 'Chưa cập nhật'}\n"
+                            f"Giờ uống: "
+                            f"{', '.join(schedule.reminder_times or [])}\n"
+                            f"Ngày bắt đầu: "
+                            f"{schedule.start_date}\n"
+                            f"Ngày kết thúc: "
+                            f"{schedule.end_date or 'Không giới hạn'}"
+                        )
+                    )
+
+            return schedule
+
+        except Exception:
+            db.rollback()
+            raise
 
     @staticmethod
     def get_schedules(

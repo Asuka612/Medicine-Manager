@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-
+from app.services.notification_service import NotificationService
 from app.models.user import User
 from app.models.member import FamilyMember
 from app.models.medication import Medication
@@ -72,6 +72,37 @@ class MedicationService:
 
             db.commit()
             db.refresh(medication)
+
+            member = (
+                db.query(FamilyMember)
+                .filter(
+                    FamilyMember.id == medication.family_member_id
+                )
+                .first()
+            )
+
+            if member:
+                user = (
+                    db.query(User)
+                    .filter(
+                        User.id == member.member_id
+                    )
+                    .first()
+                )
+
+                if user:
+                    NotificationService.send_notification(
+                        receiver_email=user.email,
+                        subject="Thuốc mới được thêm",
+                        message=(
+                            f"Bạn vừa được thêm thuốc mới.\n\n"
+                            f"Tên thuốc: {medication.name}\n"
+                            f"Liều lượng: "
+                            f"{medication.dosage or 'Chưa cập nhật'}\n"
+                            f"Số lượng: "
+                            f"{medication.stock_quantity}"
+                        )
+                    )
 
             return medication
 

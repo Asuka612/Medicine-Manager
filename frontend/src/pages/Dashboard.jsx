@@ -169,13 +169,7 @@ function Dashboard({ onOpenMember, onOpenJournal, onOpenStatistics }) {
           <span className="sidebar-item-label">Dashboard</span>
         </button>
 
-        <button
-          className="sidebar-item"
-          type="button"
-          onClick={() => setShowMemberForm(false)}
-        >
-          <span className="sidebar-item-label">Thành viên</span>
-        </button>
+        
 
         <button
           className="sidebar-item"
