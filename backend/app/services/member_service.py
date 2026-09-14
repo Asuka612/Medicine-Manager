@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-
+from app.core.security import hash_password
 from app.models.user import User
 from app.models.member import FamilyMember
 from app.repositories.member_repo import MemberRepository
@@ -46,12 +46,12 @@ class MemberService:
 
         try:
             new_user = MemberRepository.create_user(
-                db=db,
-                email=data.email,
-                password_hash=data.password,
-                full_name=data.full_name,
-                manager_id=admin_id
-            )
+             db=db,
+             email=data.email,
+            password_hash=hash_password(data.password),
+            full_name=data.full_name,
+             manager_id=admin_id
+)
 
             family_member = MemberRepository.create_family_member(
                 db=db,

@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 
-SENDER_EMAIL = "nguyenanhkhoa5057@gmail.com"
+SENDER_EMAIL = "nguyenanhkhoa5115@gmail.com"
 SENDER_PASSWORD = "cvvtyiykvadmevdt"
 
 SENDER_PASSWORD = "".join(SENDER_PASSWORD.split())

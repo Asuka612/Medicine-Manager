@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta, timezone
 
 from jose import JWTError, jwt
@@ -8,10 +9,9 @@ from pwdlib import PasswordHash
 # Cấu hình JWT
 # =========================
 
-SECRET_KEY = "medicine-manager-secret-key-change-later"
-
+# Lấy từ biến môi trường hoặc dùng key mặc định cho dev
+SECRET_KEY = os.getenv("SECRET_KEY", "medicine-manager-secret-key-change-later")
 ALGORITHM = "HS256"
-
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 
@@ -26,14 +26,8 @@ def hash_password(password: str) -> str:
     return password_hash.hash(password)
 
 
-def verify_password(
-    plain_password: str,
-    hashed_password: str
-) -> bool:
-    return password_hash.verify(
-        plain_password,
-        hashed_password
-    )
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return password_hash.verify(plain_password, hashed_password)
 
 
 # =========================
@@ -44,22 +38,17 @@ def create_access_token(
     data: dict,
     expires_delta: timedelta | None = None
 ) -> str:
-
     to_encode = data.copy()
 
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = (
-            datetime.now(timezone.utc)
-            + timedelta(
-                minutes=ACCESS_TOKEN_EXPIRE_MINUTES
-            )
+        expire = datetime.now(timezone.utc) + timedelta(
+            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
-    to_encode.update({
-        "exp": expire
-    })
+    # Chuyển đối tượng datetime sang timestamp integer chuẩn UNIX
+    to_encode.update({"exp": int(expire.timestamp())})
 
     encoded_jwt = jwt.encode(
         to_encode,
@@ -77,8 +66,6 @@ def decode_access_token(token: str) -> dict | None:
             SECRET_KEY,
             algorithms=[ALGORITHM]
         )
-
         return payload
-
     except JWTError:
         return None

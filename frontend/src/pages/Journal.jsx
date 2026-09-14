@@ -158,12 +158,7 @@ function Journal({
             Thống kê
         </button>
 
-        <button
-            className="sidebar-item"
-            type="button"
-        >
-            Cài đặt
-        </button>
+        
 
         <button
             type="button"

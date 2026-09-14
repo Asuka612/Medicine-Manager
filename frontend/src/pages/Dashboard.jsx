@@ -213,14 +213,7 @@ function Dashboard({
           </span>
         </button>
 
-        <button
-          className="sidebar-item"
-          type="button"
-        >
-          <span className="sidebar-item-label">
-            Cài đặt
-          </span>
-        </button>
+        
 
         <button
           type="button"
