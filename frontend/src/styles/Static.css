@@ -182,9 +182,10 @@ body {
 .statistics-section {
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 24px;
   margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.025);
 }
 
 .statistics-section-header {
@@ -383,10 +384,7 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .statistics-section {
-    padding: 18px;
-  }
-
+ 
   .low-stock-card {
     align-items: flex-start;
   }

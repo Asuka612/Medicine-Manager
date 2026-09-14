@@ -44,16 +44,13 @@ class LogService:
 
             should_create = False
 
-            # Nếu có weekdays thì ưu tiên weekdays
             if schedule.weekdays:
-                # Python weekday:
-                # Monday = 0 ... Sunday = 6
+                
                 if current_date.weekday() in schedule.weekdays:
                     should_create = True
 
             else:
-                # Không có weekdays:
-                # dùng frequency_days
+               
                 days_from_start = (
                     current_date - schedule.start_date
                 ).days
