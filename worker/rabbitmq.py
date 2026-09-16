@@ -1,7 +1,6 @@
 import pika
 
-
-RABBITMQ_HOST = "localhost"
+RABBITMQ_HOST = "rabbitmq"
 RABBITMQ_PORT = 5672
 
 QUEUE_NAME = "medication_notifications"
