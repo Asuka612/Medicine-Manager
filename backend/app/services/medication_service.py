@@ -216,7 +216,7 @@ class MedicationService:
         )
 
         try:
-            # Lấy tất cả schedule sử dụng thuốc này
+            
             schedules = (
                 db.query(Schedule)
                 .filter(
@@ -227,7 +227,7 @@ class MedicationService:
 
             schedule_ids = [schedule.id for schedule in schedules]
 
-            # Xóa log của các schedule
+          
             if schedule_ids:
                 db.query(Log).filter(
                     Log.schedule_id.in_(schedule_ids)
@@ -242,7 +242,7 @@ class MedicationService:
                     synchronize_session=False
                 )
 
-            # Xóa thuốc
+            
             db.delete(medication)
 
             db.commit()

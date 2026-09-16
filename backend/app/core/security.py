@@ -4,24 +4,11 @@ from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from pwdlib import PasswordHash
 
-
-# =========================
-# Cấu hình JWT
-# =========================
-
-# Lấy từ biến môi trường hoặc dùng key mặc định cho dev
 SECRET_KEY = os.getenv("SECRET_KEY", "medicine-manager-secret-key-change-later")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-
-# =========================
-# Password hashing
-# =========================
-
 password_hash = PasswordHash.recommended()
-
-
 def hash_password(password: str) -> str:
     return password_hash.hash(password)
 

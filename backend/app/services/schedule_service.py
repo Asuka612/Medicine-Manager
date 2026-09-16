@@ -326,14 +326,14 @@ class ScheduleService:
         )
 
         try:
-            # Xóa toàn bộ log của schedule
+            
             db.query(Log).filter(
                 Log.schedule_id == schedule.id
             ).delete(
                 synchronize_session=False
             )
 
-            # Xóa schedule
+            
             db.delete(schedule)
 
             db.commit()

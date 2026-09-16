@@ -47,13 +47,13 @@ export default function LoginPage() {
       alert(data.message);
 
       if (isLoginMode) {
-        // Lưu JWT
+        
         localStorage.setItem(
           "access_token",
           data.access_token
         );
 
-        // Lưu thông tin user
+        
         localStorage.setItem(
           "user",
           JSON.stringify(data.user)

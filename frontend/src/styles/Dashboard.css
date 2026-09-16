@@ -17,9 +17,7 @@ body {
     #eef3f9;
 }
 
-/* ================================
-   SIDEBAR
-================================ */
+
 
 .dashboard-sidebar {
   width: 250px;
@@ -101,9 +99,7 @@ body {
   transform: translateY(1px);
 }
 
-/* ================================
-   MAIN CONTENT & LAYOUT
-================================ */
+
 
 .dashboard-main {
   flex: 1;
@@ -166,9 +162,7 @@ body {
   font-weight: 600;
 }
 
-/* ================================
-   SECTION HEADINGS
-================================ */
+
 
 .overview-section,
 .members-section {
@@ -228,9 +222,7 @@ body {
   letter-spacing: -0.35px;
 }
 
-/* ================================
-   OVERVIEW CARDS
-================================ */
+
 
 .overview-cards {
   display: grid;
@@ -364,9 +356,7 @@ body {
   color: #7a8799;
 }
 
-/* ================================
-   MEMBERS
-================================ */
+
 
 .members-section {
   padding: 24px;
@@ -531,10 +521,6 @@ body {
   color: #718096;
 }
 
-/* ================================
-   MEMBER DETAIL
-================================ */
-
 .member-detail-header {
   margin-bottom: 18px;
 }
@@ -585,9 +571,7 @@ body {
   font-size: 14px;
 }
 
-/* ================================
-   MEDICATION
-================================ */
+
 
 .medication-list {
   display: grid;
@@ -615,9 +599,7 @@ body {
   font-size: 14px;
 }
 
-/* ================================
-   SCHEDULE
-================================ */
+
 
 .schedule-list {
   display: grid;
@@ -645,9 +627,7 @@ body {
   font-size: 14px;
 }
 
-/* ================================
-   MODAL
-================================ */
+
 
 .modal-overlay {
   position: fixed;
@@ -722,10 +702,6 @@ body {
   overflow-y: auto;
 }
 
-/* ================================
-   FORM
-================================ */
-
 .form-group {
   display: flex;
   flex-direction: column;
@@ -792,9 +768,6 @@ body {
   cursor: pointer;
 }
 
-/* ================================
-   LOADING
-================================ */
 
 .dashboard-loading {
   min-height: 100vh;
@@ -806,9 +779,7 @@ body {
   background: #eef3f9;
 }
 
-/* ================================
-   RESPONSIVE: TABLET
-================================ */
+
 
 @media (max-width: 1200px) {
   .dashboard-sidebar {
@@ -862,9 +833,7 @@ body {
   }
 }
 
-/* ================================
-   RESPONSIVE: MOBILE
-================================ */
+
 
 @media (max-width: 700px) {
   .dashboard-container {
@@ -985,9 +954,7 @@ body {
   }
 }
 
-/* ================================
-   DELETE BUTTON
-================================ */
+
 
 .delete-button {
   margin-top: 12px;
@@ -1015,305 +982,276 @@ body {
   outline: none;
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
 }
-/* =========================================================
-   COLOR OVERRIDE - BLUE GRAY THEME
-   DÁN CUỐI FILE CSS
-========================================================= */
 
-/* ---------- GLOBAL ---------- */
+
 
 body {
-    background: #dfe6ef !important;
-    color: #172033 !important;
+  background: #dfe6ef !important;
+  color: #172033 !important;
 }
 
 .dashboard-container {
-    background:
-        radial-gradient(
-            circle at 80% 0%,
-            rgba(37, 99, 235, 0.08),
-            transparent 28%
-        ),
-        #dfe6ef !important;
+  background:
+    radial-gradient(circle at 80% 0%,
+      rgba(37, 99, 235, 0.08),
+      transparent 28%),
+    #dfe6ef !important;
 }
 
 
-/* ---------- SIDEBAR ---------- */
 
 .dashboard-sidebar {
-    background: #d3dce7 !important;
-    border-right: 1px solid #c1ccd9 !important;
-    box-shadow: 5px 0 22px rgba(15, 23, 42, 0.08) !important;
+  background: #d3dce7 !important;
+  border-right: 1px solid #c1ccd9 !important;
+  box-shadow: 5px 0 22px rgba(15, 23, 42, 0.08) !important;
 }
 
 .sidebar-item {
-    color: #465568 !important;
+  color: #465568 !important;
 }
 
 .sidebar-item:hover {
-    background: #c7d3e1 !important;
-    color: #1f5fe8 !important;
+  background: #c7d3e1 !important;
+  color: #1f5fe8 !important;
 }
 
 .sidebar-item.active {
-    background: #bcd2ee !important;
-    color: #1854c7 !important;
+  background: #bcd2ee !important;
+  color: #1854c7 !important;
 }
 
 .sidebar-logo {
-    color: #1f5fe8 !important;
+  color: #1f5fe8 !important;
 }
 
 
-/* ---------- MAIN HEADER ---------- */
 
 .dashboard-header {
-    background: #e7ecf2 !important;
-    border-bottom: 1px solid #cdd6e1 !important;
-    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
+  background: #e7ecf2 !important;
+  border-bottom: 1px solid #cdd6e1 !important;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
 }
 
 .header-title {
-    color: #172033 !important;
+  color: #172033 !important;
 }
 
 .header-user {
-    color: #4f5f73 !important;
+  color: #4f5f73 !important;
 }
 
 
-/* ---------- SECTION ---------- */
 
 .section-date {
-    background: #d2dce8 !important;
-    color: #526276 !important;
+  background: #d2dce8 !important;
+  color: #526276 !important;
 }
 
 
-/* ---------- OVERVIEW CARDS ---------- */
 
 .overview-card {
-    background: linear-gradient(
-        145deg,
-        #eef2f6 0%,
-        #e7ecf2 100%
-    ) !important;
+  background: linear-gradient(145deg,
+      #eef2f6 0%,
+      #e7ecf2 100%) !important;
 
-    border-color: #cbd5e1 !important;
+  border-color: #cbd5e1 !important;
 
-    box-shadow:
-        0 7px 18px rgba(15, 23, 42, 0.07) !important;
+  box-shadow:
+    0 7px 18px rgba(15, 23, 42, 0.07) !important;
 }
 
 .overview-card:hover {
-    border-color: #aebdce !important;
-    box-shadow:
-        0 14px 30px rgba(15, 23, 42, 0.11) !important;
+  border-color: #aebdce !important;
+  box-shadow:
+    0 14px 30px rgba(15, 23, 42, 0.11) !important;
 }
 
 .overview-trend {
-    background: #dce3eb !important;
-    color: #59697c !important;
+  background: #dce3eb !important;
+  color: #59697c !important;
 }
 
 .overview-number {
-    color: #152039 !important;
+  color: #152039 !important;
 }
 
 .overview-label {
-    color: #334155 !important;
+  color: #334155 !important;
 }
 
 .overview-description {
-    color: #66768a !important;
+  color: #66768a !important;
 }
 
-
-/* ---------- FAMILY SECTION ---------- */
 
 .members-section {
-    background: #d8e0e9 !important;
-    border-color: #c4cfdb !important;
+  background: #d8e0e9 !important;
+  border-color: #c4cfdb !important;
 
-    box-shadow:
-        0 7px 20px rgba(15, 23, 42, 0.06) !important;
+  box-shadow:
+    0 7px 20px rgba(15, 23, 42, 0.06) !important;
 }
 
-
-/* ---------- MEMBER CARDS ---------- */
-
 .member-card {
-    background: #e9eef3 !important;
-    border-color: #cbd5e1 !important;
+  background: #e9eef3 !important;
+  border-color: #cbd5e1 !important;
 
-    box-shadow:
-        0 5px 14px rgba(15, 23, 42, 0.06) !important;
+  box-shadow:
+    0 5px 14px rgba(15, 23, 42, 0.06) !important;
 }
 
 .member-card:hover {
-    border-color: #aebdce !important;
-    box-shadow:
-        0 12px 22px rgba(15, 23, 42, 0.10) !important;
+  border-color: #aebdce !important;
+  box-shadow:
+    0 12px 22px rgba(15, 23, 42, 0.10) !important;
 }
 
 .member-info h3 {
-    color: #172033 !important;
+  color: #172033 !important;
 }
 
 .member-info p {
-    background: #d7e0ea !important;
-    color: #536276 !important;
+  background: #d7e0ea !important;
+  color: #536276 !important;
 }
 
 
-/* ---------- AVATAR ---------- */
 
 .member-avatar {
-    background: linear-gradient(
-        145deg,
-        #dbe7f5,
-        #cbdcf1
-    ) !important;
+  background: linear-gradient(145deg,
+      #dbe7f5,
+      #cbdcf1) !important;
 
-    border-color: #b7cce7 !important;
-    color: #225bd7 !important;
+  border-color: #b7cce7 !important;
+  color: #225bd7 !important;
 }
 
 
-/* ---------- BUTTON ---------- */
 
 .secondary-button {
-    background: #e1e7ee !important;
-    border-color: #bdc9d7 !important;
-    color: #3c4c60 !important;
+  background: #e1e7ee !important;
+  border-color: #bdc9d7 !important;
+  color: #3c4c60 !important;
 }
 
 .secondary-button:hover {
-    background: #d5dee8 !important;
-    border-color: #9eafc3 !important;
+  background: #d5dee8 !important;
+  border-color: #9eafc3 !important;
 }
 
 .primary-button {
-    background: #2563eb !important;
+  background: #2563eb !important;
 }
 
 .primary-button:hover {
-    background: #1d4ed8 !important;
+  background: #1d4ed8 !important;
 }
 
 
-/* ---------- EMPTY STATE ---------- */
 
 .empty-state {
-    background: #e5ebf1 !important;
-    border-color: #bcc9d8 !important;
+  background: #e5ebf1 !important;
+  border-color: #bcc9d8 !important;
 }
 
 .empty-state-icon {
-    background: #d8e5f5 !important;
+  background: #d8e5f5 !important;
 }
 
 .empty-state h3 {
-    color: #1d2939 !important;
+  color: #1d2939 !important;
 }
 
 .empty-state p {
-    color: #66768a !important;
+  color: #66768a !important;
 }
 
 
-/* ---------- MEMBER DETAIL ---------- */
 
 .member-profile,
 .medication-section,
 .schedule-section {
-    background: #e8edf2 !important;
-    border-color: #cbd5e1 !important;
+  background: #e8edf2 !important;
+  border-color: #cbd5e1 !important;
 
-    box-shadow:
-        0 6px 16px rgba(15, 23, 42, 0.06) !important;
+  box-shadow:
+    0 6px 16px rgba(15, 23, 42, 0.06) !important;
 }
 
 
-/* ---------- MEDICATION ---------- */
 
 .medication-card {
-    background: #e3e9ef !important;
-    border-color: #c8d2de !important;
+  background: #e3e9ef !important;
+  border-color: #c8d2de !important;
 }
 
 .medication-card p {
-    color: #5d6c7e !important;
+  color: #5d6c7e !important;
 }
 
 
-/* ---------- SCHEDULE ---------- */
 
 .schedule-card {
-    background: #e3e9ef !important;
-    border-color: #c8d2de !important;
+  background: #e3e9ef !important;
+  border-color: #c8d2de !important;
 }
 
 .schedule-card p {
-    color: #4f5f72 !important;
+  color: #4f5f72 !important;
 }
 
 
-/* ---------- MODAL ---------- */
 
 .modal {
-    background: #e5ebf1 !important;
-    border-color: #c7d1dd !important;
+  background: #e5ebf1 !important;
+  border-color: #c7d1dd !important;
 
-    box-shadow:
-        0 20px 55px rgba(15, 23, 42, 0.25) !important;
+  box-shadow:
+    0 20px 55px rgba(15, 23, 42, 0.25) !important;
 }
 
 .modal-header {
-    background: #d8e0e9 !important;
-    border-bottom-color: #c5d0dc !important;
+  background: #d8e0e9 !important;
+  border-bottom-color: #c5d0dc !important;
 }
 
 .modal-header h2 {
-    color: #182235 !important;
+  color: #182235 !important;
 }
 
 .modal-close {
-    background: #e2e8ee !important;
-    border-color: #c0ccd9 !important;
+  background: #e2e8ee !important;
+  border-color: #c0ccd9 !important;
 }
 
 .modal-close:hover {
-    background: #d4dde7 !important;
+  background: #d4dde7 !important;
 }
 
 
-/* ---------- FORM ---------- */
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-    background: #eef2f6 !important;
-    border-color: #becad7 !important;
-    color: #1f2937 !important;
+  background: #eef2f6 !important;
+  border-color: #becad7 !important;
+  color: #1f2937 !important;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    background: #f3f6f9 !important;
+  background: #f3f6f9 !important;
 }
 
 
-/* ---------- DELETE ---------- */
 
 .delete-button {
-    background: #e5ebf1 !important;
+  background: #e5ebf1 !important;
 }
 
 
-/* ---------- LOADING ---------- */
 
 .dashboard-loading {
-    background: #dfe6ef !important;
+  background: #dfe6ef !important;
 }

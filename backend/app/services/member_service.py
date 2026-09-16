@@ -164,7 +164,7 @@ class MemberService:
         )
 
         try:
-            # 1. Lấy tất cả schedule của member
+            
             schedules = (
                 db.query(Schedule)
                 .filter(

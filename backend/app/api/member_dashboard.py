@@ -71,7 +71,6 @@ def get_member_dashboard(
             detail="Không tìm thấy thành viên."
         )
 
-    # Thành viên chỉ được xem dashboard của chính mình
     if (
         current_user.role == "MEMBER"
         and member.member_id != current_user.id
@@ -81,9 +80,7 @@ def get_member_dashboard(
             detail="Bạn không có quyền xem dashboard của thành viên này."
         )
 
-    # ==========================================
-    # 2. Xác định tuần
-    # ==========================================
+  
 
     if week_start is None:
         today = date.today()
@@ -91,9 +88,7 @@ def get_member_dashboard(
 
     week_end = week_start + timedelta(days=6)
 
-    # ==========================================
-    # 3. Lấy schedules
-    # ==========================================
+    
 
     schedules = (
         db.query(Schedule)
@@ -116,9 +111,7 @@ def get_member_dashboard(
             schedule=schedule
         )
 
-    # ==========================================
-    # 4. Lấy medications
-    # ==========================================
+    
 
     medication_ids = [
         schedule.medication_id
@@ -141,9 +134,7 @@ def get_member_dashboard(
             for medication in medication_list
         }
 
-    # ==========================================
-    # 5. Lấy logs trong tuần
-    # ==========================================
+
 
     logs = (
         db.query(Log)
@@ -159,9 +150,6 @@ def get_member_dashboard(
         .all()
     )
 
-    # ==========================================
-    # 6. Format schedules
-    # ==========================================
 
     schedule_result = []
 
@@ -197,10 +185,7 @@ def get_member_dashboard(
             )
         })
 
-    # ==========================================
-    # 7. Format logs
-    # ==========================================
-
+    
     log_result = []
 
     for log in logs:
@@ -213,9 +198,6 @@ def get_member_dashboard(
             "action_time": log.action_time
         })
 
-    # ==========================================
-    # 8. Response
-    # ==========================================
 
     return {
         "member": {

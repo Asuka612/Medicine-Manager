@@ -1,4 +1,3 @@
-/* Tổng quan trang: Căn giữa tuyệt đối và tạo nền gradient nhẹ nhàng */
 body {
   margin: 0;
   padding: 0;
@@ -10,7 +9,6 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Khung form chính */
 .login-container {
   width: 100%;
   max-width: 420px;
@@ -21,7 +19,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Tiêu đề */
 .login-container h2 {
   text-align: center;
   color: #1a365d;
@@ -31,14 +28,12 @@ body {
   line-height: 1.4;
 }
 
-/* Form layout */
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Nhóm input */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -67,7 +62,6 @@ body {
   box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
 }
 
-/* Nút bấm submit */
 .btn-submit {
   padding: 12px;
   background-color: #3182ce;
@@ -89,7 +83,6 @@ body {
   transform: scale(0.98);
 }
 
-/* Chữ chuyển đổi đăng nhập/đăng ký */
 .toggle-text {
   margin-top: 25px;
   text-align: center;

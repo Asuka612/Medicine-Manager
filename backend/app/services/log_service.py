@@ -17,10 +17,7 @@ class LogService:
         week_start: date,
         week_end: date
     ):
-        """
-        Tự tạo Log Pending cho các lần uống thuốc
-        trong tuần nếu Log chưa tồn tại.
-        """
+        
 
         current_date = max(
             schedule.start_date,
@@ -105,10 +102,7 @@ class LogService:
         db: Session,
         schedule: Schedule
     ):
-        """
-        Tự chuyển Log Pending thành Missed
-        nếu đã quá thời gian uống 60 phút.
-        """
+       
 
         missed_before = datetime.now() - timedelta(
             minutes=60
