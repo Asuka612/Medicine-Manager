@@ -472,13 +472,7 @@ function Member({ member, onBack }) {
       </div>
 
       <nav>
-        <button
-          type="button"
-          className="sidebar-item"
-          onClick={onBack}
-        >
-          Dashboard
-        </button>
+        
 
         <button
           type="button"
@@ -487,26 +481,9 @@ function Member({ member, onBack }) {
           Thành viên
         </button>
 
-        <button
-          type="button"
-          className="sidebar-item"
-        >
-          Nhật ký
-        </button>
+        
 
-        <button
-          type="button"
-          className="sidebar-item"
-        >
-          Thống kê
-        </button>
-
-        <button
-          type="button"
-          className="sidebar-item"
-        >
-          Cài đặt
-        </button>
+        
 
         <button
           type="button"
