@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from app.database import SessionLocal
 from app.models.log import Log
@@ -39,11 +39,7 @@ class SchedulerService:
                 ):
                     continue
 
-                # Đảm bảo có Log
-                week_start = (
-                    today
-                )
-
+                week_start = today
                 week_end = today
 
                 LogService.ensure_logs_for_week(
@@ -59,8 +55,7 @@ class SchedulerService:
                     db.query(Log)
                     .filter(
                         Log.schedule_id == schedule.id,
-                        Log.status == "Pending",
-                        Log.scheduled_time <= now
+                        Log.status == "Pending"
                     )
                     .all()
                 )
@@ -70,14 +65,37 @@ class SchedulerService:
                     if log.id in NOTIFIED_LOGS:
                         continue
 
+                    reminder_before = (
+                        schedule.reminder_before_minutes or 0
+                    )
+
+                    notification_time = (
+                        log.scheduled_time
+                        - timedelta(
+                            minutes=reminder_before
+                        )
+                    )
+                    if reminder_before > 0:
+
+                        if not (
+                            notification_time <= now
+                            < log.scheduled_time
+                        ):
+                            continue
+
+                    else:
+
+                        if now < log.scheduled_time:
+                            continue
+
                     medication = (
                         db.query(Medication)
                         .filter(
-                            Medication.id == schedule.medication_id
+                            Medication.id
+                            == schedule.medication_id
                         )
                         .first()
                     )
-
                     member = (
                         db.query(FamilyMember)
                         .filter(
@@ -101,6 +119,23 @@ class SchedulerService:
                     if not user:
                         continue
 
+                    print(
+                        "[Scheduler] SEND | "
+                        f"schedule_id={schedule.id} | "
+                        f"log_id={log.id} | "
+                        f"family_member_id="
+                        f"{schedule.family_member_id} | "
+                        f"user_id={user.id} | "
+                        f"email={user.email} | "
+                        f"scheduled_time="
+                        f"{log.scheduled_time} | "
+                        f"notification_time="
+                        f"{notification_time} | "
+                        f"now={now}"
+                    )
+
+                
+
                     NotificationService.send_notification(
                         receiver_email=user.email,
                         subject="Đến giờ uống thuốc",
@@ -115,6 +150,7 @@ class SchedulerService:
                         )
                     )
 
+                   
                     NOTIFIED_LOGS.add(log.id)
 
         finally:
@@ -133,4 +169,5 @@ class SchedulerService:
                     f"[Scheduler] Lỗi: {error}"
                 )
 
+            
             await asyncio.sleep(10)
