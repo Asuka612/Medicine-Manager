@@ -1,4 +1,5 @@
 import json
+import time
 
 from rabbitmq import create_connection, QUEUE_NAME
 from notification import send_notification
@@ -30,29 +31,62 @@ def callback(
 
 
 def start_worker():
-    connection = create_connection()
+    while True:
+        connection = None
 
-    channel = connection.channel()
+        try:
+            print(
+                "Worker đang kết nối tới RabbitMQ..."
+            )
 
-    channel.queue_declare(
-        queue=QUEUE_NAME,
-        durable=True
-    )
+            connection = create_connection()
 
-    channel.basic_qos(
-        prefetch_count=1
-    )
+            channel = connection.channel()
 
-    channel.basic_consume(
-        queue=QUEUE_NAME,
-        on_message_callback=callback
-    )
+            channel.queue_declare(
+                queue=QUEUE_NAME,
+                durable=True
+            )
 
-    print(
-        "Worker đang chờ notification..."
-    )
+            channel.basic_qos(
+                prefetch_count=1
+            )
 
-    channel.start_consuming()
+            channel.basic_consume(
+                queue=QUEUE_NAME,
+                on_message_callback=callback
+            )
+
+            print(
+                "Worker đang chờ notification..."
+            )
+
+            channel.start_consuming()
+
+        except KeyboardInterrupt:
+            print(
+                "Worker đã dừng."
+            )
+            break
+
+        except Exception as error:
+            print(
+                f"Lỗi kết nối/Worker: {error}"
+            )
+            print(
+                "RabbitMQ chưa sẵn sàng hoặc kết nối bị mất."
+            )
+            print(
+                "Worker sẽ thử kết nối lại sau 5 giây..."
+            )
+
+            if connection is not None:
+                try:
+                    connection.close()
+                except Exception:
+                    pass
+
+            time.sleep(5)
 
 
 if __name__ == "__main__":
